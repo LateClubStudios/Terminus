@@ -109,7 +109,6 @@
     <Compile Include="Assets\Scripts\CameraParallax.cs" />
     <Compile Include="Assets\Scripts\CameraTrack.cs" />
     <Compile Include="Assets\Scripts\CameraWobble.cs" />
-    <Compile Include="Assets\Scripts\Cursor.cs" />
     <Compile Include="Assets\Scripts\DragObject.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\MainMenu_Start.cs" />
