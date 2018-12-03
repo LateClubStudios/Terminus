@@ -118,6 +118,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1496858461954032, guid: bd360d0bcacd45447be81c7611fff05a,
     type: 2}
   m_PrefabInternal: {fileID: 1542239010}
+--- !u!114 &991010896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 991010890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101334c79c5882544a47185d78dc0541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 1064333098}
+  player: {fileID: 991010890}
 --- !u!1 &1064333098
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,7 +144,6 @@ GameObject:
   - component: {fileID: 1064333105}
   - component: {fileID: 1064333100}
   - component: {fileID: 1064333099}
-  - component: {fileID: 1064333104}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Grabbable
@@ -215,25 +227,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1064333098}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.866, y: 0.57, z: 1.065}
+  m_LocalPosition: {x: -0.731, y: 0.57, z: 1.065}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1064333104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1064333098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 101334c79c5882544a47185d78dc0541, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 1064333098}
-  player: {fileID: 991010890}
 --- !u!65 &1064333105
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -245,7 +244,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0.5, y: 0, z: 0}
 --- !u!1 &1108413571 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: adf0c51395aa9bb4996023ee66b42a4e,
@@ -507,6 +506,21 @@ Prefab:
     - target: {fileID: 4334259349657558, guid: bd360d0bcacd45447be81c7611fff05a, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114987736452370480, guid: bd360d0bcacd45447be81c7611fff05a,
+        type: 2}
+      propertyPath: speed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114987736452370480, guid: bd360d0bcacd45447be81c7611fff05a,
+        type: 2}
+      propertyPath: walkSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114987736452370480, guid: bd360d0bcacd45447be81c7611fff05a,
+        type: 2}
+      propertyPath: sprintSpeed
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd360d0bcacd45447be81c7611fff05a, type: 2}

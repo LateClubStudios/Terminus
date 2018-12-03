@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: c9ba4fac57e63e649acb71174dbf708e
   - enabled: 1
-    path: Assets/Scenes/TutorialScene.unity
+    path: Assets/Scenes/MaintenanceRoomScene.unity
     guid: 655060c03662c6f41a86716ce896b325
   - enabled: 1
     path: Assets/Scenes/BakerStAndUndergroundScene.unity

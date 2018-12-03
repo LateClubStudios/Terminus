@@ -112,9 +112,11 @@
     <Compile Include="Assets\Scripts\DragObject.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\MainMenu_Start.cs" />
+    <Compile Include="Assets\Scripts\MouseJoystickOveride.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerController_BAckup.cs" />
+    <Compile Include="Assets\Scripts\PlayerControllerBackUp.cs" />
     <Compile Include="Assets\Scripts\ResetPlayerPosition.cs" />
     <Compile Include="Assets\Scripts\RotationLock.cs" />
     <Compile Include="Assets\Scripts\SetingsMenu.cs" />

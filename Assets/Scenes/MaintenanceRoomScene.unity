@@ -6262,7 +6262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b414fabd1807b4a869339a4b1ec393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 2800000, guid: 2fa25a2f135350d45b9f2b554f5fc394, type: 3}
 --- !u!4 &1018711125
 Transform:
   m_ObjectHideFlags: 0
@@ -7368,7 +7367,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -8066,7 +8065,13 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114987736452370480, guid: bd360d0bcacd45447be81c7611fff05a,
+        type: 2}
+      propertyPath: speed
+      value: 100
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 65624976552224730, guid: bd360d0bcacd45447be81c7611fff05a, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: bd360d0bcacd45447be81c7611fff05a, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1341744715 stripped
@@ -8074,6 +8079,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1496858461954032, guid: bd360d0bcacd45447be81c7611fff05a,
     type: 2}
   m_PrefabInternal: {fileID: 1341744714}
+--- !u!136 &1341744716
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1341744715}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.4
+  m_Height: 1.7
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1 &1356229983
 GameObject:
   m_ObjectHideFlags: 0
