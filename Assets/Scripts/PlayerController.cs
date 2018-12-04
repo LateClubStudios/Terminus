@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour {
 	//* For MovmentSystem
 	private float speed;
 	public float walkSpeed;
+
+	private float spritXbox;
 	public float sprintSpeed;
 
 	//* For JumpingSystem
@@ -17,12 +19,16 @@ public class PlayerController : MonoBehaviour {
 	Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
 	float jumpForce = 1.5f;
 
+	//* For StopOnPauseSystem
+	private bool gamePaused;
+	private float oldSpeed;
+
 	void Start ()
 	{
 		playerRigidbody = GetComponent<Rigidbody>();
 		playerAnimator = GetComponent<Animator>();
 		playerCollider = GetComponent<BoxCollider>();
-
+		speed = walkSpeed;
 	}
 
 	void FixedUpdate ()
@@ -30,24 +36,45 @@ public class PlayerController : MonoBehaviour {
 		JumpingSystem ();
 		MovmentSystem ();
 		CrouchingSystem ();
+		SprintSystem ();
+		StopOnPauseSystem ();
+	}
+
+	void StopOnPauseSystem()
+	{
+		gamePaused = PauseMenu.gameIsPaused;
+		if (speed != 0) {
+			oldSpeed = speed;
+		}
+		if (gamePaused == false) {
+			speed = oldSpeed;
+		} else if (gamePaused == true) {
+			speed = 0;
+		}
+	}
+
+	private void SprintSystem()
+	{
+
+		spritXbox = Input.GetAxis ("Sprint");
+
+		if (spritXbox > 0.5)
+		{
+			speed = sprintSpeed;
+		}
+		else if (spritXbox < 0.5)
+		{
+			speed = walkSpeed;
+		}
 	}
 
 	private void MovmentSystem()
 	{
-		if (Input.GetButtonDown("Sprint"))
-		{
-			speed = sprintSpeed;
-		}
-		else if (Input.GetButtonUp("Sprint"))
-		{
-			speed = walkSpeed;
-		}
-
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 
 		Vector3 movement = new Vector3 (0.0f, 0.0f, moveHorizontal);
 
-		playerRigidbody.AddForce (movement * speed);
+		transform.Translate(movement * speed);
 	}
 		
 	private void JumpingSystem()

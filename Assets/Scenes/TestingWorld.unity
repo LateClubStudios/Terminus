@@ -515,12 +515,12 @@ Prefab:
     - target: {fileID: 114987736452370480, guid: bd360d0bcacd45447be81c7611fff05a,
         type: 2}
       propertyPath: walkSpeed
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 114987736452370480, guid: bd360d0bcacd45447be81c7611fff05a,
         type: 2}
       propertyPath: sprintSpeed
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd360d0bcacd45447be81c7611fff05a, type: 2}

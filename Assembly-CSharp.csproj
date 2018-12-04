@@ -107,12 +107,11 @@
     <Compile Include="Assets\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
     <Compile Include="Assets\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
     <Compile Include="Assets\Scripts\CameraParallax.cs" />
-    <Compile Include="Assets\Scripts\CameraTrack.cs" />
-    <Compile Include="Assets\Scripts\CameraWobble.cs" />
     <Compile Include="Assets\Scripts\DragObject.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\MainMenu_Start.cs" />
     <Compile Include="Assets\Scripts\MouseJoystickOveride.cs" />
+    <Compile Include="Assets\Scripts\ObjectTrack.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerController_BAckup.cs" />
