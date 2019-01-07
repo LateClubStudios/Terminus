@@ -14,15 +14,25 @@ using UnityEngine;
 
     private void Update()
     {
-        float mouseHorizontal = Input.GetAxis("Mouse X");
-        float mouseVertical = Input.GetAxis("Mouse Y");
+	//	Input.mousePosition.x += Input.GetAxis ("xboxr");
 
-        Vector3 mouseMovement = new Vector3(0.0f, mouseVertical, mouseHorizontal);
-
-        transform.Translate(mouseMovement * speed);
+	
+	//	Mouse ();
+	//	Joypad ();
+		OnDrawGizmosSelected ();
     }
 
-    void FixedUpdate() {
+	private void Mouse()
+	{
+		float mouseHorizontal = Input.GetAxis("Mouse X");
+		float mouseVertical = Input.GetAxis("Mouse Y");
+
+		Vector3 mouseMovement = new Vector3(0.0f, mouseVertical, mouseHorizontal);
+
+		transform.Translate(mouseMovement * speed);
+	}
+
+    private void Joypad() {
 
 		float moveHorizontal = Input.GetAxis ("xboxl");
 		float moveVertical = Input.GetAxis ("xboxr");
@@ -30,8 +40,6 @@ using UnityEngine;
 		Vector3 movement = new Vector3 (0.0f, moveVertical, -moveHorizontal);
 
 		transform.Translate(movement * speed);
-
-        OnDrawGizmosSelected ();
 	}  
 
     void OnDrawGizmosSelected()

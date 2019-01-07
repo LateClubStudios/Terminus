@@ -16,7 +16,7 @@ public class TrainTrigger : MonoBehaviour {
         trainAnim.SetBool("isOnTracks", false); // Parameter for the animator is set to true. If set to false, the train animation will play once and won't play again unless the player steps into the trigger.
         playerOriginalPos = player.transform.position; // Stores values for player's starting position
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == ("Player"))
         {
