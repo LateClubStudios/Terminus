@@ -51,7 +51,7 @@ public class PlayerControllerVaultBackup : MonoBehaviour {
 
 	void StopOnPauseSystem() // Pause menu
 	{
-		gamePaused = PauseMenu.gameIsPaused;
+		gamePaused = OurPauseMenu.gameIsPaused;
 		if (speed != 0) {
 			oldSpeed = speed; // If the player is moving, store the speed
 		}
