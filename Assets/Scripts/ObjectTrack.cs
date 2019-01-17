@@ -10,7 +10,7 @@ public class ObjectTrack : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-		trackingItem.transform.position = trackedItem.transform.position;
+		trackingItem.transform.position = new Vector3 (trackingItem.transform.position.x, trackedItem.transform.position.y, trackedItem.transform.position.z);
     }
 
 }

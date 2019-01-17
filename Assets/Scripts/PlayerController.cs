@@ -36,30 +36,47 @@ public class PlayerController : MonoBehaviour {
     private bool gamePaused;
 	private float oldSpeed;
 
-	void Start ()
+    // For GameOver
+    public static bool gameIsOver = false;
+
+    // For CoverSystem
+    bool coverAllowed = false;
+    public GameObject hidePlane;
+    private Vector3 playerPos;
+    public bool isCovered = false;
+
+
+    void Start ()
 	{
 		playerRigidbody = GetComponent<Rigidbody>();
 		playerAnimator = GetComponent<Animator>();
 		playerCollider = GetComponent<BoxCollider>();
 		speed = walkSpeed; // Stores walkSpeed in the speed variable.
-  
+        //gameIsOver = false;
+        playerPos.x = transform.position.x;
+        playerAnimator.SetBool("isCovered", false);
 	}
 
     void Update()
     {
-        
+      
     }
 
     void FixedUpdate ()
 	{
-		JumpingSystem ();
-		MovmentSystem ();
-		CrouchingSystem ();
-		SprintSystem ();
-		StopOnPauseSystem ();
-		LaneSystem ();
-        // Calls functions for the player's movement, as well as the pause system.
-	}
+        if (gameIsOver == false)
+        {
+            JumpingSystem();
+            MovmentSystem();
+            CrouchingSystem();
+            SprintSystem();
+            StopOnPauseSystem();
+            //LaneSystem();
+            CoverSystem();
+            // Calls functions for the player's movement, as well as the pause system.
+        }
+
+    }
 
 	void StopOnPauseSystem() // Pause menu
 	{
@@ -139,7 +156,7 @@ public class PlayerController : MonoBehaviour {
         else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true)
         {
             isGrounded = false;
-            transform.position += Vector3.Slerp(startPos, endPos, 2.0f);   //new Vector3(0.0f, 1.5f, 0.75f);
+            transform.position += new Vector3(0.0f, 1.5f, 0.75f);
             vaultingArea = false;
             Debug.Log("Player called vault");
         }
@@ -165,6 +182,28 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+    private void CoverSystem()
+    {
+        if (Input.GetButtonDown("Cover") && coverAllowed == true)
+        {
+            if (isCovered == true)
+            {
+                isCovered = false;
+                playerAnimator.SetBool("isCovered", true); // [Supposed to] play the animation to cover behind the box.
+                Debug.Log("Player called COVER");
+                playerPos.x = transform.position.x - hidePlane.transform.position.x; // Subtracts the player's X position by the plane's X position. The plane is used for covering.
+                transform.position = new Vector3(playerPos.x, transform.position.y, transform.position.z); // Warps the player to the plane.
+            }
+            else if (isCovered == false)
+            {
+                isCovered = true;
+                playerAnimator.SetBool("isCovered", true); // [Supposed to] return the player back to their idle state.
+                Debug.Log("Player be dying");
+                transform.position = new Vector3(-playerPos.x, transform.position.y, transform.position.z); // Warps the player back to the place they were previously.
+            }
+        }
+    } // ** TODO ** - Stop player movement during covering
+
 	//* event for JumpingSystem
 	void OnCollisionEnter()
 	{
@@ -178,6 +217,11 @@ public class PlayerController : MonoBehaviour {
                 vaultingArea = true;
             Debug.Log("Inside the vaulting area");
         }
+
+        if (other.tag == "Cover")
+        {
+            coverAllowed = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -186,6 +230,14 @@ public class PlayerController : MonoBehaviour {
         {
             vaultingArea = false;
             Debug.Log("Outside the vaulting area");
+        }
+        
+        if (other.tag == "Cover")
+        {
+            coverAllowed = false;
+            isCovered = false;
+            transform.position = new Vector3(-playerPos.x, transform.position.y, transform.position.z);
+            playerAnimator.SetBool("isCovered", false);
         }
     }
 }
