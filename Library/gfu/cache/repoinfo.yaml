@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 1
-  lastUpdatedAtString: 2019-01-18T23:11:12.337+00:00
-  initializedAtString: 2019-01-18T22:31:40.516+00:00
+  lastUpdatedAtString: 2019-01-20T23:08:57.316+00:00
+  initializedAtString: 2019-01-20T23:08:57.316+00:00
   currentGitRemote:
     name: origin
     url: https://github.com/LateClubStudios/NextGenSynopticProject-Outnumbered.git

@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//* Tracks One Object To Another
+//* Morgan Joshua Finney
+//* Sep 18
+//* For NextGen Synoptic Project Game Outnumbered
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

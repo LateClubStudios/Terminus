@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//* Main Controller for player - jump, move, crouch, sprint, cover and stop on pause. 
+//* Morgan Joshua Finney & Josh Lennon 
+//* Sep 18 Through Jan 19
+//* For NextGen Synoptic Project Game Outnumbered
+
+using UnityEngine;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {

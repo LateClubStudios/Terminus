@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//* Global death - death bool to be set true from other scripts. 
+//* Morgan Joshua Finney & Josh Lennon 
+//* Jan 19
+//* For NextGen Synoptic Project Game Outnumbered
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;

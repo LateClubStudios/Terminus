@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//* Rotates a player based on the mouses position on screen.
+//* Josh Lennon
+//* Oct 18 Through Dec 18
+//* For NextGen Synoptic Project Game Outnumbered
+
+using UnityEngine;
 using System.Collections;
 using UnityEditor;
 

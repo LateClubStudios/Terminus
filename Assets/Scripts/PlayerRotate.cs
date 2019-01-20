@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//* Rotates a player based on the mouses position on screen.
+//* Morgan Joshua Finney
+//* Jan 19
+//* For NextGen Synoptic Project Game Outnumbered
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +30,7 @@ public class PlayerRotate : MonoBehaviour {
         for (loop = 0; loop <= 180; loop++)
         {
             float mouseX = Input.mousePosition.x;
-            float mouseY = Input.mousePosition.y;
+            float mouseY = Input.mousePosition.y; 
 
             int screenXCut = Screen.width / 8;
 
@@ -69,7 +74,7 @@ public class PlayerRotate : MonoBehaviour {
                     Debug.Log("player do the big rotate");
                     transform.rotation = Quaternion.Euler(0, turnVal, 0);
             }
-            //* if mouse is not in an area nothing happens
+            //* if mouse is not in an area or has not moved nothing happens
             else
             {
                 Debug.Log("mouse null");

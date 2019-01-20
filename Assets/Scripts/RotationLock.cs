@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//* Legacy sccript used to stop player falling over 
+//* Morgan Joshua Finney & Josh Lennon 
+//* Sep 18 Through Nov 18
+//* For NextGen Synoptic Project Game Outnumbered
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
