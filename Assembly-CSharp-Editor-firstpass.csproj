@@ -72,16 +72,16 @@
     <None Include="Assets\Plugins\GitHub\Editor\credits.txt" />
     <None Include="Assets\Plugins\GitHub\Editor\eula.txt" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Editor">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.2.11f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -324,28 +324,28 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.2.11f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="AsyncBridge.Net35">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/AsyncBridge.Net35.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/AsyncBridge.Net35.dll</HintPath>
     </Reference>
     <Reference Include="GitHub.Api">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.Api.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.Api.dll</HintPath>
     </Reference>
     <Reference Include="GitHub.Logging">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.Logging.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.Logging.dll</HintPath>
     </Reference>
     <Reference Include="GitHub.Unity">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.Unity.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.Unity.dll</HintPath>
     </Reference>
     <Reference Include="GitHub.UnityShim">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.UnityShim.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/GitHub.UnityShim.dll</HintPath>
     </Reference>
     <Reference Include="ReadOnlyCollectionsInterfaces">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/ReadOnlyCollectionsInterfaces.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/ReadOnlyCollectionsInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="sfw.net">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/sfw.net.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/sfw.net.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
-      <HintPath>D:/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/System.Threading.dll</HintPath>
+      <HintPath>D:/My Files/PROJECT_HIRO/NextGenSynopticProject-Outnumbered/Assets/Plugins/GitHub/Editor/System.Threading.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>C:/Users/MJF/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
