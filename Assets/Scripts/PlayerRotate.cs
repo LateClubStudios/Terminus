@@ -16,10 +16,11 @@ public class PlayerRotate : MonoBehaviour {
     public GameObject player;
     public GameObject playerHolder;
     Vector3 PosOverride;
+    public static bool rotateSwitch = true;
 
     void Update ()
     {
-        if (PlayerDeath.death == false && PlayerController.gameIsOver == false)
+        if (PlayerDeath.death == false && PlayerController.gameIsOver == false && rotateSwitch == true)
         {
             RotatePlayer();
         }
@@ -44,13 +45,13 @@ public class PlayerRotate : MonoBehaviour {
             //* if mouse is in 1st 8th player walks straight left
             if (mouseX < screenXCut  && transform.rotation != Quaternion.Euler(0, 180, 0))
             {
-                Debug.Log("mouse in lock range left");
+                //Debug.Log("mouse in lock range left");
                 transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             //* if mouse is in last 8th player walks straight rigth
             else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
             {
-                Debug.Log("mouse in lock range right");
+                //Debug.Log("mouse in lock range right");
                 transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             //* if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
@@ -67,17 +68,17 @@ public class PlayerRotate : MonoBehaviour {
                         turnVal = 180 + loop;
                     }
 
-                    Debug.Log(string.Format("turnVal = {0}", turnVal));
-                    Debug.Log(string.Format("loop = {0}", loop));
+                    //Debug.Log(string.Format("turnVal = {0}", turnVal));
+                    //Debug.Log(string.Format("loop = {0}", loop));
 
                     debug = new Quaternion(0, turnVal, 0, 0);
-                    Debug.Log("player do the big rotate");
+                    //Debug.Log("player do the big rotate");
                     transform.rotation = Quaternion.Euler(0, turnVal, 0);
             }
             //* if mouse is not in an area or has not moved nothing happens
             else
             {
-                Debug.Log("mouse null");
+                //Debug.Log("mouse null");
             }
         }
 

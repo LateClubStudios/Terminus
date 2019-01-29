@@ -1,7 +1,7 @@
-﻿//* Morgan Joshua Finney
-//* For Project Hiro
-//* 15-11-18
-//* main menu scripts
+﻿//* Main Menu UI Controller
+//* Morgan Joshua Finney
+//* Sep 18 Through Jan 19
+//* For NextGen Synoptic Project Game Outnumbered
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,18 +11,25 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
 
-	bool SettingsActive = false;
 
 	public static bool optionsIsOn = false;
-
 	public GameObject optionsMenuUI;
 
-    public static bool exitCheckIsOn = false;
 
+    public static bool startButtonIsOn = false;
+    public GameObject startButtonUI;
+
+
+    public static bool exitCheckIsOn = false;
     public GameObject exitCheckUI;
+
+
 
     public Animator transAnim;
 
+
+
+    // Attached to button Options
 	public void LoadOptions()
 	{
 		Debug.Log ("loading option");
@@ -30,42 +37,51 @@ public class MainMenu : MonoBehaviour {
 		if (optionsIsOn)
 		{
 			OptionsOn();
-		}
+            StartOff();
+
+        }
 		else
 		{
 			OptionsOff();
             ExitCheckOn();
+            StartOn();
         }
-	}
-
-
-	void OptionsOn()
-	{
-		optionsMenuUI.SetActive(false);
-		optionsIsOn = false;
-	}
-
-	void OptionsOff()
-	{
-		optionsMenuUI.SetActive(true);
-		optionsIsOn = true;
 	}
 
     //* function called from button - closes game
     public void QuitGame()
     {
-        Debug.Log("loading ecit check");
+        Debug.Log("loading exit check");
         if (exitCheckIsOn)
         {
             ExitCheckOn();
+            StartOff();
         }
         else
         {
             ExitCheckOff();
             OptionsOn();
+            StartOn();
         }
     }
 
+    // function to turn off options when on
+    void OptionsOn()
+	{
+		optionsMenuUI.SetActive(false);
+		optionsIsOn = false;
+	}
+
+    // function to turn on options when off
+    void OptionsOff()
+	{
+		optionsMenuUI.SetActive(true);
+		optionsIsOn = true;
+	}
+
+
+
+    // function to turn off exit when on
     void ExitCheckOn()
     {
         Debug.Log("turning off");
@@ -73,6 +89,7 @@ public class MainMenu : MonoBehaviour {
         exitCheckIsOn = false;
     }
 
+    // function to turn on exit when off
     void ExitCheckOff()
     {
         Debug.Log("turning on");
@@ -80,12 +97,28 @@ public class MainMenu : MonoBehaviour {
         exitCheckIsOn = true;
     }
 
-	void Start()
-	{
-		SettingsActive = false;
-	}
+    // function to turn off exit when on
+    void StartOn()
+    {
+        Debug.Log("turning off start");
+        startButtonUI.SetActive(false);
+        startButtonIsOn = false;
+        MainMenu_Start.UiOver = true;
+    }
 
-	public void startGame()
+    // function to turn on exit when off
+    void StartOff()
+    {
+        Debug.Log("turning on start");
+        startButtonUI.SetActive(true);
+        startButtonIsOn = true;
+        MainMenu_Start.UiOver = false;
+    }
+
+
+
+
+    public void startGame()
 	{
 		StartCoroutine (fadeLoad ());
 	}

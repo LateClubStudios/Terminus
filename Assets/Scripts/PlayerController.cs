@@ -26,7 +26,8 @@ public class PlayerController : MonoBehaviour {
     private float spritXbox;
 	private float sprintSpeed = 0.055f;
 
-	//* For JumpingSystem
+    //* For JumpingSystem
+    public static bool jumpSwitch = true;
 	bool isGrounded = true;
 	private Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
 	private float jumpForce = 1.7f;
@@ -35,7 +36,6 @@ public class PlayerController : MonoBehaviour {
     bool vaultingArea = false;
     public Vector3 startPos = new Vector3(0f, 0f, 0f);
     public Vector3 endPos = new Vector3(0f, 1.5f, 0.75f);
-
 
     //* For StopOnPauseSystem
     private bool gamePaused;
@@ -62,16 +62,40 @@ public class PlayerController : MonoBehaviour {
         playerAnimator.SetBool("isCovered", false);
 	}
 
-    void Update()
+
+
+        void Update()
     {
-      
+     // if (transform.position.x > 2.5f)
+        //{
+
+       //     transform.position = new Vector3(transform.position.x * 0.9f, transform.position.y, transform.position.z);
+       // }
+    //  else if (transform.position.x < -2f)
+     //   {
+      //      transform.position = new Vector3(-2f, transform.position.y, transform.position.z);
+      //  }
+
+      if (transform.position.y < 0.2f)
+        {
+            isGrounded = true;
+        }
     }
 
     void FixedUpdate ()
 	{
+        Vector3 pos = playerRigidbody.position;
+        pos.x = Mathf.Clamp(pos.x, 2, 2);
+        playerRigidbody.position = pos;
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+
         if (gameIsOver == false)
         {
-            JumpingSystem();
+            if (jumpSwitch == true)
+            {
+                JumpingSystem();
+            }
+
             MovmentSystem();
             CrouchingSystem();
             SprintSystem();
@@ -209,14 +233,24 @@ public class PlayerController : MonoBehaviour {
         }
     } // ** TODO ** - Stop player movement during covering
 
-	//* event for JumpingSystem
-	void OnCollisionEnter()
-	{
-		isGrounded = true; // If the player is on the floor, then this boolean is set to true.
-	}
+    //* event for JumpingSystem
+    void OnCollisionEnter(Collision hit)
+    {
+        if (hit.transform.gameObject.tag == "Floor")
+        {
+            isGrounded = true; // If the player is on the floor, then this boolean is set to true.
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Kill")
+        {
+            Debug.Log("PlayerBeDead");
+            PlayerDeath.death = true;
+        }
+
+
         if (other.tag == "Vaultable")
         {
                 vaultingArea = true;

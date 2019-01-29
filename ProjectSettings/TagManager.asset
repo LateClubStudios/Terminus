@@ -9,6 +9,7 @@ TagManager:
   - Vaultable
   - VaultFollowTag
   - Cover
+  - Kill
   layers:
   - Default
   - TransparentFX

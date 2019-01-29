@@ -14,21 +14,21 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_FogMode: 3
-  m_FogDensity: 0.01
-  m_LinearFogStart: 0
-  m_LinearFogEnd: 300
+  m_Fog: 1
+  m_FogColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+  m_FogMode: 1
+  m_FogDensity: 0.002
+  m_LinearFogStart: -185.9
+  m_LinearFogEnd: 888.5
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 2a22a14888d00234bb94f2205f21fd64, type: 2}
-  m_HaloStrength: 0.5
-  m_FlareStrength: 1
+  m_SkyboxMaterial: {fileID: 2100000, guid: 6ed448d9ac6d53f4f9ded0dee3cf9f5c, type: 2}
+  m_HaloStrength: 0
+  m_FlareStrength: 0.934
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.13275461, g: 0.05922091, b: 0.03450396, a: 1}
+  m_IndirectSpecularColor: {r: 0.07346482, g: 0.037812866, b: 0.026301391, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10512,7 +10512,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 359.6}
   m_LocalScale: {x: 0.022779318, y: 0.022779303, z: 0.022779318}
   m_Children:
-  - {fileID: 1201986735}
+  - {fileID: 481174393}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -27729,6 +27729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   optionsMenuUI: {fileID: 1444378923}
+  startButtonUI: {fileID: 481174390}
   exitCheckUI: {fileID: 1680840365}
   transAnim: {fileID: 1200433098}
 --- !u!1 &418667713
@@ -31227,6 +31228,76 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 480851844}
   m_Mesh: {fileID: 4302652, guid: 716573b264a43cb42a5467eccf5bb9a0, type: 3}
+--- !u!1 &481174390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 481174393}
+  - component: {fileID: 481174392}
+  - component: {fileID: 481174391}
+  m_Layer: 5
+  m_Name: StartPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &481174391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 481174390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &481174392
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 481174390}
+  m_CullTransparentMesh: 0
+--- !u!224 &481174393
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 481174390}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 26638.203}
+  m_LocalScale: {x: 28.94644, y: 28.946451, z: 28.94644}
+  m_Children:
+  - {fileID: 1201986735}
+  m_Father: {fileID: 134832981}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 15786.246, y: 12994.252}
+  m_SizeDelta: {x: 0, y: -0.1895752}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &483060811
 GameObject:
   m_ObjectHideFlags: 0
@@ -77284,7 +77355,7 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 7336e8933674c0042bb173848a5b2798, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -77378,10 +77449,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 243197705126226444, guid: 468e941390b9adb4b89fbacfaae5b771,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: e3aa12c53db6bdc4a96b4563edabe096, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 229593ef1e206104d8cc4544622ead16, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 0.9
   Loop: 1
   Mute: 0
   Spatialize: 0
@@ -77736,16 +77807,16 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1201986734}
-  m_LocalRotation: {x: -0, y: -0, z: -0.009599217, w: 0.9999539}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.0067876726, y: 0.7070743, z: -0.0067876726, w: 0.7070743}
+  m_LocalPosition: {x: 0, y: 0, z: 545.3607}
+  m_LocalScale: {x: 0.034546584, y: 0.034546554, z: 0.03454658}
   m_Children: []
-  m_Father: {fileID: 134832981}
+  m_Father: {fileID: 481174393}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -1.1}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -920.2582, y: -448.90656}
   m_SizeDelta: {x: 434.76, y: 649}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1201986736
@@ -96869,7 +96940,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.29803923, g: 0.16470589, b: 0.0627451, a: 1}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -96880,8 +96951,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.01
+  far clip plane: 1855.4
   field of view: 33
   orthographic: 0
   orthographic size: 5

@@ -14,10 +14,11 @@ public class MainMenu_Start : MonoBehaviour {
 	bool overStart = false;
 	public Mesh text;
 	public Mesh textbold;
+    public static bool UiOver = false;
 
 	void OnMouseOver()
 	{
-		if (overStart == false) {
+		if (overStart == false && UiOver == false) {
 			GetComponent<MeshFilter>().sharedMesh = textbold;
 			overStart = true;
 		}
@@ -25,7 +26,7 @@ public class MainMenu_Start : MonoBehaviour {
 
 	void OnMouseExit()
 	{
-		if (overStart == true) {
+		if (overStart == true && UiOver == false) {
 			GetComponent<MeshFilter>().sharedMesh = text;
 			overStart = false;
 		}
