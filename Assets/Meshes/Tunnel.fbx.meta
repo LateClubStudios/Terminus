@@ -1,0 +1,187 @@
+fileFormatVersion: 2
+guid: 9b618f156113cca46aa049cc0745470e
+timeCreated: 1530633096
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Can_01
+    100002: Can_02
+    100004: Dirt
+    100006: Electric_Box
+    100008: Floor
+    100010: Grass
+    100012: Lamp_01
+    100014: Lamp_02
+    100016: Metal_Wire
+    100018: Pipe_Big
+    100020: Pipe_Small
+    100022: Plant_01
+    100024: Plant_02
+    100026: Rails
+    100028: Rocks
+    100030: //RootNode
+    100032: Tunnel
+    100034: Tunnel.001
+    100036: Wire
+    100038: Wooden_Plank
+    400000: Can_01
+    400002: Can_02
+    400004: Dirt
+    400006: Electric_Box
+    400008: Floor
+    400010: Grass
+    400012: Lamp_01
+    400014: Lamp_02
+    400016: Metal_Wire
+    400018: Pipe_Big
+    400020: Pipe_Small
+    400022: Plant_01
+    400024: Plant_02
+    400026: Rails
+    400028: Rocks
+    400030: //RootNode
+    400032: Tunnel
+    400034: Tunnel.001
+    400036: Wire
+    400038: Wooden_Plank
+    2300000: Can_01
+    2300002: Can_02
+    2300004: Dirt
+    2300006: Electric_Box
+    2300008: Floor
+    2300010: Grass
+    2300012: Lamp_01
+    2300014: Lamp_02
+    2300016: Metal_Wire
+    2300018: Pipe_Big
+    2300020: Pipe_Small
+    2300022: Plant_01
+    2300024: Plant_02
+    2300026: Rails
+    2300028: Rocks
+    2300030: Tunnel
+    2300032: Tunnel.001
+    2300034: Wire
+    2300036: Wooden_Plank
+    3300000: Can_01
+    3300002: Can_02
+    3300004: Dirt
+    3300006: Electric_Box
+    3300008: Floor
+    3300010: Grass
+    3300012: Lamp_01
+    3300014: Lamp_02
+    3300016: Metal_Wire
+    3300018: Pipe_Big
+    3300020: Pipe_Small
+    3300022: Plant_01
+    3300024: Plant_02
+    3300026: Rails
+    3300028: Rocks
+    3300030: Tunnel
+    3300032: Tunnel.001
+    3300034: Wire
+    3300036: Wooden_Plank
+    4300000: Tunnel.001
+    4300002: Floor
+    4300004: Rails
+    4300006: Plant_01
+    4300008: Electric_Box
+    4300010: Plant_02
+    4300012: Grass
+    4300014: Lamp_02
+    4300016: Lamp_01
+    4300018: Wire
+    4300020: Pipe_Small
+    4300022: Can_02
+    4300024: Can_01
+    4300026: Metal_Wire
+    4300028: Wooden_Plank
+    4300030: Tunnel
+    4300032: Dirt
+    4300034: Rocks
+    4300036: Pipe_Big
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tunnel
+    second: {fileID: 2100000, guid: 9ca27e9087ed9704aa66dd0bb2f70dce, type: 2}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15
+    secondaryUVHardAngle: 16
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
