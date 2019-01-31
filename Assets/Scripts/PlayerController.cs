@@ -3,8 +3,10 @@
 //* Sep 18 Through Jan 19
 //* For NextGen Synoptic Project Game Outnumbered
 
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -13,18 +15,12 @@ public class PlayerController : MonoBehaviour {
 	private	Animator playerAnimator;
 	private BoxCollider playerCollider;
 
-	//* For MovmentSystem
-	private float speed;
-	private float walkSpeed = 0.025f;
-    private float horizontalMovment;
-
-	//* For LaneSystem
-	private float verticalMovment;
-	int lane = 0;
-
-    // Variables for speed. One for the XBOX, one for the player's sprinting speed.
-    private float spritXbox;
-	private float sprintSpeed = 0.055f;
+    //* For MovmentSystem and Sprint System
+    private bool movementInputForward, movementInputBackward, sprintInputKeyboard;
+    private float horizontalInput, movementSpeed, sprintInputXbox;
+    public float movementSpeedWalk = 8, movementSpeedSprint = 12;
+    public Transform movementTargetTrack, movmentTarget;
+    Vector3 movementTargetDirection;
 
     //* For JumpingSystem
     public static bool jumpSwitch = true;
@@ -36,6 +32,16 @@ public class PlayerController : MonoBehaviour {
     bool vaultingArea = false;
     public Vector3 startPos = new Vector3(0f, 0f, 0f);
     public Vector3 endPos = new Vector3(0f, 1.5f, 0.75f);
+
+    //* RotationSystem
+    float turnVal;
+    int loop;
+    public static bool rotateSwitch = true;
+
+    //* DeathSystem
+    public Animator playerAnim;
+    public static bool death = false;
+    public GameObject hips;
 
     //* For StopOnPauseSystem
     private bool gamePaused;
@@ -56,160 +62,234 @@ public class PlayerController : MonoBehaviour {
 		playerRigidbody = GetComponent<Rigidbody>();
 		playerAnimator = GetComponent<Animator>();
 		playerCollider = GetComponent<BoxCollider>();
-		speed = walkSpeed; // Stores walkSpeed in the speed variable.
-        //gameIsOver = false;
+        movementSpeed = movementSpeedWalk;
         playerPos.x = transform.position.x;
         playerAnimator.SetBool("isCovered", false);
 	}
 
-
-
-        void Update()
+    void Update()
     {
-     // if (transform.position.x > 2.5f)
-        //{
+        DeathSystem();
+        MovmentSystem();
 
-       //     transform.position = new Vector3(transform.position.x * 0.9f, transform.position.y, transform.position.z);
-       // }
-    //  else if (transform.position.x < -2f)
-     //   {
-      //      transform.position = new Vector3(-2f, transform.position.y, transform.position.z);
-      //  }
-
-      if (transform.position.y < 0.2f)
+        if (death == false && gameIsOver == false && rotateSwitch == true)
         {
-            isGrounded = true;
+            RotationSystem();
         }
     }
 
     void FixedUpdate ()
 	{
-        Vector3 pos = playerRigidbody.position;
-        pos.x = Mathf.Clamp(pos.x, 2, 2);
-        playerRigidbody.position = pos;
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
-
         if (gameIsOver == false)
         {
+            MovementInputSystem();
+            SprintSystem();
+
             if (jumpSwitch == true)
             {
                 JumpingSystem();
             }
 
-            MovmentSystem();
             CrouchingSystem();
-            SprintSystem();
-            StopOnPauseSystem();
-            //LaneSystem();
-            CoverSystem();
-            // Calls functions for the player's movement, as well as the pause system.
+            AttackingSystem();
+            //CoverSystem();
         }
 
     }
 
-	void StopOnPauseSystem() // Pause menu
-	{
-		gamePaused = OurPauseMenu.gameIsPaused;
-		if (speed != 0) {
-			oldSpeed = speed; // If the player is moving, store the speed
-		}
-		if (gamePaused == false) {
-			speed = oldSpeed; // If the player unpauses, set the speed to the speed that was stored before the player paused.
-		} else if (gamePaused == true) {
-			speed = 0; // If the player pauses, set the speed to 0
-		}
-	}
+    private void MovementInputSystem()
+    {
+        horizontalInput = Input.GetAxis("Horizontal");
 
-	private void SprintSystem()
-	{
+        if (horizontalInput > 0)
+        {
+            movementInputForward = true;
+            movementInputBackward = false;
+        }
+        else if (horizontalInput < 0)
+        {
+            movementInputForward = false;
+            movementInputBackward = true;
+        }
+        else if (horizontalInput == 0)
+        {
+            movementInputForward = false;
+            movementInputBackward = false;
+        }
+    }
 
-		spritXbox = Input.GetAxis ("Sprint");
+    private void MovmentSystem()
+    {
 
-		if (spritXbox > 0.5)
-		{
-			speed = sprintSpeed; // If the player's speed is more than 0.5, then the player is sprinting.
+        movementTargetTrack.transform.position = transform.position;
+        movementTargetTrack.transform.rotation = transform.rotation;
+
+        //float movementTargetDistance = Vector3.Distance(transform.position, movmentTarget.position);
+
+        movementTargetDirection = movmentTarget.position - transform.position;
+        movementTargetDirection = movementTargetDirection.normalized;
+
+        if (movementInputForward == true && movementInputBackward == false)
+        {
+            GetComponent<Rigidbody>().AddForce(movementTargetDirection * movementSpeed);
+            playerAnimator.SetBool("isWalk", true);
+        }
+        else if (movementInputBackward == true && movementInputForward == false)
+        {
+            GetComponent<Rigidbody>().AddForce(-movementTargetDirection * movementSpeedWalk);
+            playerAnimator.SetBool("isWalk", true);
+        }
+        else
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            playerAnimator.SetBool("isWalk", false);
+        }
+
+    }
+
+    private void SprintSystem()
+    {
+        sprintInputXbox = Input.GetAxis("Sprint");
+        sprintInputKeyboard = Input.GetButtonDown("Sprint");
+
+        if (sprintInputXbox > 0.5 || sprintInputKeyboard == true)
+        {
+            movementSpeed = movementSpeedSprint;
             playerAnimator.SetBool("isSprint", true);
-		}
-		else if (spritXbox < 0.5)
-		{
-			speed = walkSpeed; // If the player's speed is less, the player is walking.
+        }
+        else if (sprintInputXbox < 0.5 || sprintInputKeyboard == false)
+        {
+            movementSpeed = movementSpeedWalk;
             playerAnimator.SetBool("isSprint", false);
-		}
-	}
-
-	private void LaneSystem()
-	{
-		verticalMovment = Input.GetAxis("Vertical");
-
-		if (verticalMovment > 0.5 && lane == 0)
-		{
-			transform.position += new Vector3 (1.0f, 0.0f, 0.0f); // Only moving on the X axis.
-			lane = 1;
-		}
-		else if (verticalMovment < -0.5 && lane == 1)
-		{
-			transform.position -= new Vector3 (1.0f, 0.0f, 0.0f); // Only moving on the X axis.
-			lane = 0;
-		}
-	}
-
-	private void MovmentSystem()
-	{
-
-        horizontalMovment = Input.GetAxis("Horizontal");
-
-        float moveHorizontal = Input.GetAxis ("Horizontal");
-
-		Vector3 movement = new Vector3 (0.0f, 0.0f, moveHorizontal); // Only moving on the Z axis.
-
-		transform.Translate(movement * speed);
-        if (horizontalMovment != 0)
-        {
-            playerAnimator.SetBool("isWalk", true); // Triggers animation for walking.
         }
-        else if (horizontalMovment == 0)
-        {
-            playerAnimator.SetBool("isWalk", false); // Triggers animation for walking.
-        }
-
     }
-		
-	private void JumpingSystem()
-	{
-		if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false)
-		{
-			Debug.Log("Player called jump");
-			playerRigidbody.AddForce(jump * jumpForce, ForceMode.Impulse); // Makes the player jump via the rigidbody.
-			isGrounded = false;
-		}
+
+    private void JumpingSystem()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false)
+        {
+            playerRigidbody.AddForce(jump * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
         else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true)
         {
             isGrounded = false;
             transform.position += new Vector3(0.0f, 1.5f, 0.75f);
             vaultingArea = false;
-            Debug.Log("Player called vault");
         }
-	}
+    }
 
-	private void CrouchingSystem()
-	{
-		if (Input.GetButtonDown("Crouch"))
-		{
-			Debug.Log("Player called crouch");
-			playerCollider.size = new Vector3(0.41f, 1.2f, 0.39f);
-			playerCollider.center = new Vector3(0f, 0.6f, 0f);
-			playerAnimator.SetBool("isCrouch", true); // Halves the collider on the player and sets the paramenter on the animator to true.
-		}
+    private void CrouchingSystem()
+    {
+        if (Input.GetButtonDown("Crouch"))
+        {
+            Debug.Log("Player called crouch");
+            playerCollider.size = new Vector3(0.41f, 1.2f, 0.39f);
+            playerCollider.center = new Vector3(0f, 0.6f, 0f);
+            playerAnimator.SetBool("isCrouch", true);
+        }
 
-		if (Input.GetButtonUp("Crouch"))
-		{
-			Debug.Log("Player called stand");
+        if (Input.GetButtonUp("Crouch"))
+        {
+            Debug.Log("Player called stand");
 
-			playerCollider.size = new Vector3(0.41f, 1.67f, 0.39f);
-			playerCollider.center = new Vector3(0f, 0.84f, 0f);
-		    playerAnimator.SetBool("isCrouch", false); // Returns collider back to normal and sets parameter to false.
-		}
-	}
+            playerCollider.size = new Vector3(0.41f, 1.67f, 0.39f);
+            playerCollider.center = new Vector3(0f, 0.84f, 0f);
+            playerAnimator.SetBool("isCrouch", false);
+        }
+    }
+
+    private void AttackingSystem()
+    {
+        if (Input.GetButtonDown("Attack"))
+        {
+            playerAnimator.SetBool("isAttack", true);
+        }
+
+        if (Input.GetButtonUp("Attack"))
+        {
+            playerAnimator.SetBool("isAttack", false);
+        }
+    }
+
+    private void RotationSystem()
+    {
+        for (loop = 0; loop <= 180; loop++)
+        {
+            float mouseX = Input.mousePosition.x;
+            float mouseY = Input.mousePosition.y;
+
+            int screenXCut = Screen.width / 8;
+
+            int screenXTemp = screenXCut * 6;
+            int screenX = screenXTemp / 180;
+            int screenY = Screen.height / 2;
+
+            int screenSpaceUpper = screenX * loop + screenXCut;
+            int screenSpaceLower = screenSpaceUpper - screenX;
+
+            //* if mouse is in 1st 8th player walks straight left
+            if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            //* if mouse is in last 8th player walks straight rigth
+            else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            //* if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
+            else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != loop)
+            {
+
+                if (mouseY < screenY)
+                {
+                    turnVal = 180 - loop;
+                }
+                else if (mouseY > screenY)
+                {
+                    turnVal = 180 + loop;
+                }
+
+                transform.rotation = Quaternion.Euler(0, turnVal, 0);
+            }
+        }
+
+        if (loop > 180)
+        {
+            loop = 0;
+        }
+
+
+
+    }
+
+    private void DeathSystem()
+    {
+        if (death == true)
+        {
+            PlayerController.gameIsOver = true;
+            playerAnim.enabled = false;
+            // turn on all child rbs and coliders and joints
+            hips.SetActive(true);
+            StartCoroutine(gOverScene());
+
+        }
+        else if (death == false)
+        {
+            PlayerController.gameIsOver = false;
+            playerAnim.enabled = true;
+            // turn off all child rbs and coliders and joints
+            hips.SetActive(false);
+        }
+    }
+
+    IEnumerator gOverScene()
+    {
+        yield return new WaitForSeconds(2.0f);
+        SceneManager.LoadScene(4);
+    }
 
     private void CoverSystem()
     {
@@ -231,9 +311,8 @@ public class PlayerController : MonoBehaviour {
                 transform.position = new Vector3(-playerPos.x, transform.position.y, transform.position.z); // Warps the player back to the place they were previously.
             }
         }
-    } // ** TODO ** - Stop player movement during covering
+    }
 
-    //* event for JumpingSystem
     void OnCollisionEnter(Collision hit)
     {
         if (hit.transform.gameObject.tag == "Floor")
@@ -247,13 +326,13 @@ public class PlayerController : MonoBehaviour {
         if (other.tag == "Kill")
         {
             Debug.Log("PlayerBeDead");
-            PlayerDeath.death = true;
+            death = true;
         }
 
 
         if (other.tag == "Vaultable")
         {
-                vaultingArea = true;
+            vaultingArea = true;
             Debug.Log("Inside the vaulting area");
         }
 
@@ -270,7 +349,7 @@ public class PlayerController : MonoBehaviour {
             vaultingArea = false;
             Debug.Log("Outside the vaulting area");
         }
-        
+
         if (other.tag == "Cover")
         {
             coverAllowed = false;

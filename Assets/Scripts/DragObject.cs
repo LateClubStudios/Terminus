@@ -47,7 +47,7 @@ public class DragObject : MonoBehaviour {
             Debug.Log("boi a bit less sad");
             if (Input.GetButtonDown("Grab")) // ..and the user presses the button to Grab...
             {
-                PlayerRotate.rotateSwitch = false; // Turns player rotation off
+                PlayerController.rotateSwitch = false; // Turns player rotation off
                 PlayerController.jumpSwitch = false; // Turns player's jump mechanic off
 
                 if (player.transform.rotation.y <= -90 /*|| player.transform.rotation.y >= 90*/) // If the player is facing forwards...
@@ -92,7 +92,7 @@ public class DragObject : MonoBehaviour {
 
     void unParent ()
     {
-        PlayerRotate.rotateSwitch = true; // Turn rotation back on
+        PlayerController.rotateSwitch = true; // Turn rotation back on
         PlayerController.jumpSwitch = true; // Turn jumping back on
         Debug.Log("Object ungrabbed");
         transform.parent = null; // unParent object from player

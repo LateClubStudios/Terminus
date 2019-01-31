@@ -51,7 +51,7 @@ public class GameOverMenu : MonoBehaviour {
 
     IEnumerator fadeLoad()
     {
-        PlayerDeath.death = false;
+        PlayerController.death = false;
         transAnim.SetBool("Started", true);
         yield return new WaitForSeconds(2.0f);
         SceneManager.LoadScene(1);
