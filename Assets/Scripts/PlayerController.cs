@@ -17,16 +17,15 @@ public class PlayerController : MonoBehaviour {
 
     //* For MovmentSystem and Sprint System
     private bool movementInputForward, movementInputBackward, sprintInputKeyboard;
-    private float horizontalInput, movementSpeed, sprintInputXbox;
-    public float movementSpeedWalk = 8, movementSpeedSprint = 12;
-    public Transform movementTargetTrack, movmentTarget;
+    private float horizontalInput, movementSpeed, sprintInputXbox, movementSpeedMax, movementSpeedWalk = 10, movementSpeedSprint = 16, movementSpeedMaxWalk = 1.25f, movementSpeedMaxSprint = 2.75f;
+    public Transform movementTargetTrack, movmentTarget, cameraTrack;
     Vector3 movementTargetDirection;
 
     //* For JumpingSystem
     public static bool jumpSwitch = true;
 	bool isGrounded = true;
 	private Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
-	private float jumpForce = 1.7f;
+	private float jumpForce = 17f;
 
     //* For VaultingSystem
     bool vaultingArea = false;
@@ -39,7 +38,6 @@ public class PlayerController : MonoBehaviour {
     public static bool rotateSwitch = true;
 
     //* DeathSystem
-    public Animator playerAnim;
     public static bool death = false;
     public GameObject hips;
 
@@ -120,6 +118,7 @@ public class PlayerController : MonoBehaviour {
 
     private void MovmentSystem()
     {
+        cameraTrack.transform.position = new Vector3(cameraTrack.transform.position.x, transform.position.y, transform.position.z);
 
         movementTargetTrack.transform.position = transform.position;
         movementTargetTrack.transform.rotation = transform.rotation;
@@ -139,6 +138,11 @@ public class PlayerController : MonoBehaviour {
             GetComponent<Rigidbody>().AddForce(-movementTargetDirection * movementSpeedWalk);
             playerAnimator.SetBool("isWalk", true);
         }
+        else if (isGrounded == false)
+        {
+            Debug.Log("player be flossin'");
+        }
+
         else
         {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -146,6 +150,10 @@ public class PlayerController : MonoBehaviour {
             playerAnimator.SetBool("isWalk", false);
         }
 
+        if (GetComponent<Rigidbody>().velocity.magnitude > movementSpeedMax)
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedMax);
+        }
     }
 
     private void SprintSystem()
@@ -156,11 +164,13 @@ public class PlayerController : MonoBehaviour {
         if (sprintInputXbox > 0.5 || sprintInputKeyboard == true)
         {
             movementSpeed = movementSpeedSprint;
+            movementSpeedMax = movementSpeedMaxSprint;
             playerAnimator.SetBool("isSprint", true);
         }
         else if (sprintInputXbox < 0.5 || sprintInputKeyboard == false)
         {
             movementSpeed = movementSpeedWalk;
+            movementSpeedMax = movementSpeedMaxWalk;
             playerAnimator.SetBool("isSprint", false);
         }
     }
@@ -169,7 +179,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false)
         {
-            playerRigidbody.AddForce(jump * jumpForce, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(transform.up * 20, ForceMode.Impulse);
             isGrounded = false;
         }
         else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true)
@@ -269,9 +279,9 @@ public class PlayerController : MonoBehaviour {
     {
         if (death == true)
         {
+
             PlayerController.gameIsOver = true;
-            playerAnim.enabled = false;
-            // turn on all child rbs and coliders and joints
+            playerAnimator.enabled = false;
             hips.SetActive(true);
             StartCoroutine(gOverScene());
 
@@ -279,8 +289,7 @@ public class PlayerController : MonoBehaviour {
         else if (death == false)
         {
             PlayerController.gameIsOver = false;
-            playerAnim.enabled = true;
-            // turn off all child rbs and coliders and joints
+            playerAnimator.enabled = true;
             hips.SetActive(false);
         }
     }
@@ -325,15 +334,12 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.tag == "Kill")
         {
-            Debug.Log("PlayerBeDead");
             death = true;
         }
-
 
         if (other.tag == "Vaultable")
         {
             vaultingArea = true;
-            Debug.Log("Inside the vaulting area");
         }
 
         if (other.tag == "Cover")
@@ -347,15 +353,6 @@ public class PlayerController : MonoBehaviour {
         if (other.tag == "Vaultable")
         {
             vaultingArea = false;
-            Debug.Log("Outside the vaulting area");
-        }
-
-        if (other.tag == "Cover")
-        {
-            coverAllowed = false;
-            isCovered = false;
-            transform.position = new Vector3(-playerPos.x, transform.position.y, transform.position.z);
-            playerAnimator.SetBool("isCovered", false);
         }
     }
 }
