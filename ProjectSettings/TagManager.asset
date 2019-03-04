@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Floor
+  - Vaultable
+  - Kill
+  - VaultFollowTag
+  - Drag
+  - Cover
+  - VaultDrag
+  - Climb
+  - CrouchOut
   layers:
   - Default
   - TransparentFX

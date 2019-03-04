@@ -1,167 +1,167 @@
 ﻿//* Main Controller for player - jump, move, crouch, sprint, cover and stop on pause. 
 //* Morgan Joshua Finney & Josh Lennon 
-//* Sep 18 Through Jan 19
+//* Sep 18 Through Feb 19
 //* For NextGen Synoptic Project Game Outnumbered
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
+
+    public static bool lockOutAll = true;
 
     // Private variables. Getting the player's rigid body, animator, and collider.
-	private Rigidbody playerRigidbody;
-	private	Animator playerAnimator;
-	private BoxCollider playerCollider;
+    private Rigidbody playerRigidbody;
+    private Animator playerAnimator;
+    private CapsuleCollider playerCollider;
 
-    //* For MovmentSystem and Sprint System
-    private bool movementInputForward, movementInputBackward, sprintInputKeyboard;
-    private float horizontalInput, movementSpeed, sprintInputXbox, movementSpeedMax, movementSpeedWalk = 10, movementSpeedSprint = 16, movementSpeedMaxWalk = 1.25f, movementSpeedMaxSprint = 2.75f;
-    public Transform movementTargetTrack, movmentTarget, cameraTrack;
-    Vector3 movementTargetDirection;
 
-    //* For JumpingSystem
-    public static bool jumpSwitch = true;
-	bool isGrounded = true;
-	private Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
-	private float jumpForce = 17f;
-
-    //* For VaultingSystem
-    bool vaultingArea = false;
-    public Vector3 startPos = new Vector3(0f, 0f, 0f);
-    public Vector3 endPos = new Vector3(0f, 1.5f, 0.75f);
-
-    //* RotationSystem
-    float turnVal;
-    int loop;
-    public static bool rotateSwitch = true;
-
-    //* DeathSystem
-    public static bool death = false;
-    public GameObject hips;
-
-    //* For StopOnPauseSystem
+    // dont know what these are for this is why we should name stuff properly
     private bool gamePaused;
-	private float oldSpeed;
-
-    // For GameOver
-    public static bool gameIsOver = false;
-
-    // For CoverSystem
-    bool coverAllowed = false;
-    public GameObject hidePlane;
-    private Vector3 playerPos;
-    public bool isCovered = false;
+    private float oldSpeed;
+    Vector3 Legacy;
+    public GameObject Boi;
+    float difrance2;
+    bool covered;
 
 
-    void Start ()
-	{
-		playerRigidbody = GetComponent<Rigidbody>();
-		playerAnimator = GetComponent<Animator>();
-		playerCollider = GetComponent<BoxCollider>();
+
+
+
+    void Start()
+    {
+        StartCoroutine(playerGroundedCheckSet());
+
+        playerRigidbody = GetComponent<Rigidbody>();
+        playerAnimator = GetComponent<Animator>();
+        playerCollider = GetComponent<CapsuleCollider>();
         movementSpeed = movementSpeedWalk;
-        playerPos.x = transform.position.x;
-        playerAnimator.SetBool("isCovered", false);
-	}
+
+    }
 
     void Update()
     {
-        DeathSystem();
-        MovmentSystem();
+        FovSystem();
+        CameraSystem();
 
-        if (death == false && gameIsOver == false && rotateSwitch == true)
+        if (lockOutAll != true)
         {
-            RotationSystem();
-        }
-    }
 
-    void FixedUpdate ()
-	{
-        if (gameIsOver == false)
-        {
-            MovementInputSystem();
-            SprintSystem();
+            JumpSystem();
+            CrouchSystem();
+            AttackSystem();
+            CoverSystem();
 
-            if (jumpSwitch == true)
+            DeathSystem();
+            if (covered != true)
             {
-                JumpingSystem();
+                MovementSystem();
             }
 
-            CrouchingSystem();
-            AttackingSystem();
-            //CoverSystem();
-        }
+            GrabSystem();
 
+            if (death == false && gameIsOver == false && rotateSwitch == true)
+            {
+                RotationSystem();
+            }
+
+        }
     }
 
-    private void MovementInputSystem()
+
+
+
+    //      ______ ______      __   _______     _______ _______ ______ __  __ 
+    //     |  ____/ __ \ \    / /  / ____\ \   / / ____|__   __|  ____|  \/  |
+    //     | |__ | |  | \ \  / /  | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //     |  __|| |  | |\ \/ /    \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //     | |   | |__| | \  /     ____) |  | |  ____) |  | |  | |____| |  | |
+    //     |_|    \____/   \/     |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //*    Changes the main cameras FOV based on the players x position
+
+    public Camera mainCamera;
+    float FovSpeed = 0.015f;
+    Vector3 lastFramePosition;
+
+    private void FovSystem()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        if (transform.position.x < 1 && transform.position.x > -1)
+        {
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 65, FovSpeed);
+        }
+        else if (transform.position.x > 2)
+        {
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 75, FovSpeed);
+        }
+        else if (transform.position.x < -3.5)
+        {
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 30, FovSpeed);
+        }
 
-        if (horizontalInput > 0)
+
+        if (transform.position.x < lastFramePosition.x - 0.0005)
         {
-            movementInputForward = true;
-            movementInputBackward = false;
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 30, FovSpeed);
         }
-        else if (horizontalInput < 0)
+        else if (transform.position.x > lastFramePosition.x + 0.0005)
         {
-            movementInputForward = false;
-            movementInputBackward = true;
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, 75, FovSpeed);
         }
-        else if (horizontalInput == 0)
-        {
-            movementInputForward = false;
-            movementInputBackward = false;
-        }
+        lastFramePosition = transform.position;
     }
 
-    private void MovmentSystem()
+
+
+    //       _____          __  __ ______ _____               _______     _______ _______ ______ __  __ 
+    //      / ____|   /\   |  \/  |  ____|  __ \     /\      / ____\ \   / / ____|__   __|  ____|  \/  |
+    //     | |       /  \  | \  / | |__  | |__) |   /  \    | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //     | |      / /\ \ | |\/| |  __| |  _  /   / /\ \    \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //     | |____ / ____ \| |  | | |____| | \ \  / ____ \   ____) |  | |  ____) |  | |  | |____| |  | |
+    //      \_____/_/    \_\_|  |_|______|_|  \_\/_/    \_\ |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* Changes the main cameras y and z position based on the players y and z position.
+
+    public Transform cameraTrack;
+
+    private void CameraSystem()
     {
         cameraTrack.transform.position = new Vector3(cameraTrack.transform.position.x, transform.position.y, transform.position.z);
+    }
 
+
+
+    //     __  __  ______      ________ __  __ ______ _   _ _______    _______     _______ _______ ______ __  __ 
+    //    |  \/  |/ __ \ \    / /  ____|  \/  |  ____| \ | |__   __|  / ____\ \   / / ____|__   __|  ____|  \/  |
+    //    | \  / | |  | \ \  / /| |__  | \  / | |__  |  \| |  | |    | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //    | |\/| | |  | |\ \/ / |  __| | |\/| |  __| | . ` |  | |     \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //    | |  | | |__| | \  /  | |____| |  | | |____| |\  |  | |     ____) |  | |  ____) |  | |  | |____| |  | |
+    //    |_|  |_|\____/   \/   |______|_|  |_|______|_| \_|  |_|    |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* moves the player, basiclly sprint and walk.
+
+    private bool sprintInputKeyboard;
+    private float horizontalInput, movementSpeed, sprintInputXbox, movementSpeedMax, movementSpeedWalk = 10000, movementSpeedSprint = 16000, movementSpeedMaxWalk = 1.25f, movementSpeedMaxSprint = 2.75f;
+    public Transform movementTargetTrack, movementTarget;
+    Vector3 movementTargetDirection, movementClamp;
+
+    private void MovementSystem()
+    {
+        //* sets veribels based on certain inputs
+        sprintInputXbox = Input.GetAxis("Sprint");
+        sprintInputKeyboard = Input.GetButtonDown("Sprint");
+        horizontalInput = Input.GetAxis("Horizontal");
+
+        //* moves movment force target 
+        movementTargetDirection = movementTarget.position - transform.position;
+        movementTargetDirection = movementTargetDirection.normalized;
         movementTargetTrack.transform.position = transform.position;
         movementTargetTrack.transform.rotation = transform.rotation;
 
-        //float movementTargetDistance = Vector3.Distance(transform.position, movmentTarget.position);
-
-        movementTargetDirection = movmentTarget.position - transform.position;
-        movementTargetDirection = movementTargetDirection.normalized;
-
-        if (movementInputForward == true && movementInputBackward == false)
-        {
-            GetComponent<Rigidbody>().AddForce(movementTargetDirection * movementSpeed);
-            playerAnimator.SetBool("isWalk", true);
-        }
-        else if (movementInputBackward == true && movementInputForward == false)
-        {
-            GetComponent<Rigidbody>().AddForce(-movementTargetDirection * movementSpeedWalk);
-            playerAnimator.SetBool("isWalk", true);
-        }
-        else if (isGrounded == false)
-        {
-            Debug.Log("player be flossin'");
-        }
-
-        else
-        {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            playerAnimator.SetBool("isWalk", false);
-        }
-
-        if (GetComponent<Rigidbody>().velocity.magnitude > movementSpeedMax)
-        {
-            GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedMax);
-        }
-    }
-
-    private void SprintSystem()
-    {
-        sprintInputXbox = Input.GetAxis("Sprint");
-        sprintInputKeyboard = Input.GetButtonDown("Sprint");
-
-        if (sprintInputXbox > 0.5 || sprintInputKeyboard == true)
+        //* turns sprint on and off
+        if (sprintInputXbox > 0.5 && horizontalInput >= 0 || sprintInputKeyboard == true && horizontalInput >= 0)
         {
             movementSpeed = movementSpeedSprint;
             movementSpeedMax = movementSpeedMaxSprint;
@@ -173,44 +173,383 @@ public class PlayerController : MonoBehaviour {
             movementSpeedMax = movementSpeedMaxWalk;
             playerAnimator.SetBool("isSprint", false);
         }
+
+        //* adds corect force towards the target.
+        if (horizontalInput > 0)
+        {
+            GetComponent<Rigidbody>().AddForce(movementTargetDirection * movementSpeed * Time.deltaTime);
+            playerAnimator.SetBool("isWalk", true);
+        }
+        else if (horizontalInput < 0)
+        {
+            GetComponent<Rigidbody>().AddForce(-movementTargetDirection * movementSpeedWalk * Time.deltaTime);
+            playerAnimator.SetBool("isWalk", true);
+        }
+        else if (horizontalInput == 0)
+        {
+            playerAnimator.SetBool("isWalk", false);
+        }
+
+        //* stops the player going to fast
+        movementClamp = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedMax);
+        GetComponent<Rigidbody>().velocity = new Vector3(movementClamp.x, playerRigidbody.velocity.y, movementClamp.z);
     }
 
-    private void JumpingSystem()
+
+    //   _____   ____ _______    _______ _____ ____  _   _    _______     _______ _______ ______ __  __ 
+    //  |  __ \ / __ \__   __|/\|__   __|_   _/ __ \| \ | |  / ____\ \   / / ____|__   __|  ____|  \/  |
+    //  | |__) | |  | | | |  /  \  | |    | || |  | |  \| | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //  |  _  /| |  | | | | / /\ \ | |    | || |  | | . ` |  \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //  | | \ \| |__| | | |/ ____ \| |   _| || |__| | |\  |  ____) |  | |  ____) |  | |  | |____| |  | |
+    //  |_|  \_\\____/  |_/_/    \_\_|  |_____\____/|_| \_| |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* Gets the mouses screen position and converst it to a rotation for the player. 
+
+    float turnVal;
+    int rotationLoop;
+    public static bool rotateSwitch = true;
+
+    private void RotationSystem()
     {
-        if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false)
+        for (rotationLoop = 0; rotationLoop <= 180; rotationLoop++)
         {
-            GetComponent<Rigidbody>().AddForce(transform.up * 20, ForceMode.Impulse);
-            isGrounded = false;
+            float mouseX = Input.mousePosition.x;
+            float mouseY = Input.mousePosition.y;
+
+            int screenXCut = Screen.width / 8;
+
+            int screenXTemp = screenXCut * 6;
+            int screenX = screenXTemp / 180;
+            int screenY = Screen.height / 3;
+
+            int screenSpaceUpper = screenX * rotationLoop + screenXCut;
+            int screenSpaceLower = screenSpaceUpper - screenX;
+
+            // if mouse is in 1st 8th player walks straight left
+            if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            // if mouse is in last 8th player walks straight rigth
+            else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            // if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
+            else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != rotationLoop)
+            {
+
+                if (mouseY < screenY)
+                {
+                    turnVal = 180 - rotationLoop;
+                }
+                else if (mouseY > screenY)
+                {
+                    turnVal = 180 + rotationLoop;
+                }
+
+                transform.rotation = Quaternion.Euler(0, turnVal, 0);
+            }
         }
-        else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true)
+
+        if (rotationLoop > 180)
+        {
+            rotationLoop = 0;
+        }
+    }
+
+
+
+    //        _ _    _ __  __ _____     _______     _______ _______ ______ __  __ 
+    //       | | |  | |  \/  |  __ \   / ____\ \   / / ____|__   __|  ____|  \/  |
+    //       | | |  | | \  / | |__) | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //   _   | | |  | | |\/| |  ___/   \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //  | |__| | |__| | |  | | |       ____) |  | |  ____) |  | |  | |____| |  | |
+    //   \____/ \____/|_|  |_|_|      |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* powers the jump vault and climb machanics
+
+    public float movementSpeedClimb, movementSpeedClimbMax;
+    public static bool jumpSwitch = true;
+    public bool isGrounded = false;
+    private Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
+    private float jumpForce = 30f;
+
+    public bool climbingArea;
+    bool beTheClimbing = false;
+
+    bool vaultingArea = false;
+    public Vector3 startPos = new Vector3(0f, 0f, 0f);
+    public Vector3 endPos = new Vector3(0f, 1.5f, 0.75f);
+
+    private void JumpSystem()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false && climbingArea == false)
         {
             isGrounded = false;
-            transform.position += new Vector3(0.0f, 1.5f, 0.75f);
+            GetComponent<Rigidbody>().AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        }
+        else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true && climbingArea == false)
+        {
+            isGrounded = false;
+            transform.position = new Vector3(Boi.transform.position.x, Boi.transform.position.x + 1.8f, Boi.transform.position.z + 0.75f);
             vaultingArea = false;
         }
-    }
 
-    private void CrouchingSystem()
-    {
-        if (Input.GetButtonDown("Crouch"))
+
+        if (Input.GetButtonDown("Jump") && vaultingArea == false && climbingArea == true)
         {
-            Debug.Log("Player called crouch");
-            playerCollider.size = new Vector3(0.41f, 1.2f, 0.39f);
-            playerCollider.center = new Vector3(0f, 0.6f, 0f);
-            playerAnimator.SetBool("isCrouch", true);
+            beTheClimbing = true;
+            playerAnimator.SetBool("isClimbing", true);
+        }
+        else if (Input.GetButtonUp("Jump") && beTheClimbing == true || climbingArea == false && beTheClimbing == true)
+        {
+            beTheClimbing = false;
+            playerAnimator.SetBool("isClimbing", false);
+            rotateSwitch = true;
+            Debug.Log("Player Controller | ClimbingSystem() | Climbing off");
         }
 
-        if (Input.GetButtonUp("Crouch"))
+        if (beTheClimbing == true)
         {
-            Debug.Log("Player called stand");
+            rotateSwitch = false;
+            transform.rotation = new Quaternion(0, 180, 0, 0);
+            Debug.Log("PlayerController | ClimbingSystem - Climbing Force");
+            isGrounded = false;
+            GetComponent<Rigidbody>().AddForce(Vector3.up * movementSpeedClimb * Time.deltaTime);
 
-            playerCollider.size = new Vector3(0.41f, 1.67f, 0.39f);
-            playerCollider.center = new Vector3(0f, 0.84f, 0f);
+            Vector3 temp2 = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedClimbMax);
+            GetComponent<Rigidbody>().velocity = new Vector3(movementClamp.x, movementClamp.y, movementClamp.z);
+            Debug.Log("Player Controller | Player's movement locked, fall you fucking cunt");
+        }
+    }
+
+
+
+    //    _____ _____   ____  _    _ _   _ _____  ______ _____     _______     _______ _______ ______ __  __ 
+    //   / ____|  __ \ / __ \| |  | | \ | |  __ \|  ____|  __ \   / ____\ \   / / ____|__   __|  ____|  \/  |
+    //  | |  __| |__) | |  | | |  | |  \| | |  | | |__  | |  | | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //  | | |_ |  _  /| |  | | |  | | . ` | |  | |  __| | |  | |  \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //  | |__| | | \ \| |__| | |__| | |\  | |__| | |____| |__| |  ____) |  | |  ____) |  | |  | |____| |  | |
+    //   \_____|_|  \_\\____/ \____/|_| \_|_____/|______|_____/  |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* Checks wether the player is at the same hight as befor therefor telling us if he is on the ground
+
+    float lastHight;
+
+    IEnumerator playerGroundedCheck()
+    {
+        if (transform.position.y < lastHight + 0.00005f && transform.position.y > lastHight - 0.00005f)
+        {
+            yield return new WaitForSeconds(1.0f);
+            Debug.Log("PlayerController | PlayerGroundCheck - Player is Last Height");
+            isGrounded = true; // If the player is on the floor, then this boolean is set to true.
+        }
+        else if (transform.position.y > lastHight + 0.00005f || transform.position.y < lastHight - 0.00005f)
+        {
+            yield return new WaitForSeconds(0.01f);
+            Debug.Log("PlayerController | PlayerGroundCheck - Player is lower or higher than last height");
+            isGrounded = false; // If the player is on the floor, then this boolean is set to true.
+        }
+
+        StartCoroutine(playerGroundedCheckSet());
+    }
+
+    IEnumerator playerGroundedCheckSet()
+    {
+        yield return new WaitForEndOfFrame();
+        Debug.Log("PlayerController | PlayerGroundCheck - setting last height");
+        lastHight = transform.position.y;
+
+        StartCoroutine(playerGroundedCheck());
+    }
+
+
+
+    //       _____ _____   ____  _    _  _____ _    _    _______     _______ _______ ______ __  __ 
+    //      / ____|  __ \ / __ \| |  | |/ ____| |  | |  / ____\ \   / / ____|__   __|  ____|  \/  |
+    //     | |    | |__) | |  | | |  | | |    | |__| | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //     | |    |  _  /| |  | | |  | | |    |  __  |  \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //     | |____| | \ \| |__| | |__| | |____| |  | |  ____) |  | |  ____) |  | |  | |____| |  | |
+    //      \_____|_|  \_\\____/ \____/ \_____|_|  |_| |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* changes the colidder and animation on the player
+
+    bool crouchTimeout = false;
+    bool crouchTimeoutOnce = false;
+    bool crouchOutBool = false;
+
+    private void CrouchSystem()
+    {
+        if (Input.GetButtonDown("Crouch") && crouchTimeout == false)
+        {
+            Debug.Log("PlayerController | CrouchSystem - Player Crouched");
+            playerCollider.height = 1.0f;
+            playerCollider.center = new Vector3(0f, 0.6f, 0f);
+            playerAnimator.SetBool("isCrouch", true);
+            crouchTimeout = true;
+
+        }
+
+        if (crouchTimeout == true && crouchTimeoutOnce == false)
+        {
+            crouchTimeoutOnce = true;
+            StartCoroutine("crouchTimer");
+        }
+
+        if (Input.GetButtonUp("Crouch") && crouchOutBool == false)
+        {
+            Debug.Log("PlayerController | CrouchSystem - Player UnCrouched");
+            playerCollider.height = 1.7f;
+            playerCollider.center = new Vector3(0f, 0.85f, 0f);
             playerAnimator.SetBool("isCrouch", false);
         }
     }
 
-    private void AttackingSystem()
+    IEnumerator crouchTimer()
+    {
+        yield return new WaitForSeconds(1.0f);
+        crouchTimeout = false;
+        crouchTimeoutOnce = false;
+        Debug.Log("PlayerController | CrouchSystem - Player Crouch Timeout Ended");
+    }
+
+
+
+    //        _____ _____            ____     _______     _______ _______ ______ __  __ 
+    //       / ____|  __ \     /\   |  _ \   / ____\ \   / / ____|__   __|  ____|  \/  |
+    //      | |  __| |__) |   /  \  | |_) | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //      | | |_ |  _  /   / /\ \ |  _  <  \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //      | |__| | | \ \  / ____ \| |_) |  ____) |  | |  ____) |  | |  | |____| |  | |
+    //       \_____|_|  \_\/_/    \_\____/  |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* If the player is in the trigger...
+
+    public GameObject Box;
+    bool dragOn = false;
+    bool dragLOL = false;
+
+    public GameObject player;  // Variable for getting the player
+    public Transform boxPos;
+    Quaternion rotation;       // Rotation variable to stop the box from rotating awkwardly - rigid body constraints stop working when useing perant
+    Vector3 difrance, boyBeLitAndHoldingTheBox, boxStart;
+
+    void GrabSystem()
+    {
+        if (dragOn == true)
+        {
+            Debug.Log("PlayerController | GrabSystem - Player in Grab Area");
+
+            if (Input.GetButtonDown("Grab"))
+            {
+                Debug.Log("PlayerController | GrabSystem - Player Grabed");
+                boyBeLitAndHoldingTheBox = transform.position;
+                boxStart = Box.transform.position;
+                if (transform.position.z < Box.transform.position.z)
+                {
+                    transform.rotation = new Quaternion(0, 0, 0, 0);
+                }
+                else if (transform.position.z > Box.transform.position.z)
+                {
+                    transform.rotation = new Quaternion(0, 180, 0, 0);
+                }
+            }
+
+            if (Input.GetButton("Grab"))
+            {
+                Debug.Log("PlayerController | GrabSystem - Grab Movment");
+
+                Box.GetComponent<Rigidbody>().mass = 0;
+
+
+                rotateSwitch = false; // Turns player rotation off
+                jumpSwitch = false; // Turns player's jump mechanic off
+
+                difrance.z = boyBeLitAndHoldingTheBox.z - transform.position.z;
+
+                Box.transform.position = new Vector3(boxStart.x, boxStart.y, boxStart.z - difrance.z);
+            }
+            else
+            {
+                Debug.Log("PlayerController | GrabSystem - Box UnGrabbed");
+
+                if (Box != null)
+                {
+                    Box.GetComponent<Rigidbody>().mass = 10;
+                }
+
+                rotateSwitch = true; // Turn rotation back on
+                jumpSwitch = true; // Turn jumping back on
+            }
+
+
+        }
+        else if (dragOn == false && Input.GetButton("Grab"))
+        {
+            Debug.Log("PlayerController | GrabSystem - Box UnGrabbed");
+
+            if (Box != null)
+            {
+                Box.GetComponent<Rigidbody>().mass = 10;
+            }
+
+            rotateSwitch = true; // Turn rotation back on
+            jumpSwitch = true; // Turn jumping back on
+        }
+
+    }
+
+
+    //        _____ ______      ________ _____     _______     _______ _______ ______ __  __ 
+    //       / ____/ __ \ \    / /  ____|  __ \   / ____\ \   / / ____|__   __|  ____|  \/  |
+    //      | |   | |  | \ \  / /| |__  | |__) | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //      | |   | |  | |\ \/ / |  __| |  _  /   \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //      | |___| |__| | \  /  | |____| | \ \   ____) |  | |  ____) |  | |  | |____| |  | |
+    //       \_____\____/   \/   |______|_|  \_\ |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* allows the player to cover
+
+    bool coverAllowed = false;
+    public GameObject hidePlane;
+    private Vector3 playerPos;
+    public bool isCovered = false;
+
+    private void CoverSystem()
+    {
+        if (Input.GetButtonDown("Cover") && hidePlane != null && covered == false)
+        {
+            covered = true;
+            rotateSwitch = false;
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            Debug.Log("PlayerController | CoverSystem - player covered");
+            playerAnimator.SetBool("isCovered", true);
+            Legacy = transform.position;
+            transform.position = hidePlane.transform.position;
+        }
+        if (Input.GetButtonUp("Cover") && hidePlane != null && covered == true)
+        {
+            covered = false;
+            rotateSwitch = true;
+            Debug.Log("PlayerController | CoverSystem - Cover system off");
+            playerAnimator.SetBool("isCovered", false);
+            transform.position = Legacy;
+        }
+    }
+
+
+
+    //             _______ _______       _____ _  __   _______     _______ _______ ______ __  __ 
+    //          /\|__   __|__   __|/\   / ____| |/ /  / ____\ \   / / ____|__   __|  ____|  \/  |
+    //         /  \  | |     | |  /  \ | |    | ' /  | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //        / /\ \ | |     | | / /\ \| |    |  <    \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //       / ____ \| |     | |/ ____ \ |____| . \   ____) |  | |  ____) |  | |  | |____| |  | |
+    //      /_/    \_\_|     |_/_/    \_\_____|_|\_\ |_____/   |_| |_____/   |_|  |______|_|  |_|
+
+    //* allows the player to attack
+
+    private void AttackSystem()
     {
         if (Input.GetButtonDown("Attack"))
         {
@@ -223,57 +562,20 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void RotationSystem()
-    {
-        for (loop = 0; loop <= 180; loop++)
-        {
-            float mouseX = Input.mousePosition.x;
-            float mouseY = Input.mousePosition.y;
-
-            int screenXCut = Screen.width / 8;
-
-            int screenXTemp = screenXCut * 6;
-            int screenX = screenXTemp / 180;
-            int screenY = Screen.height / 2;
-
-            int screenSpaceUpper = screenX * loop + screenXCut;
-            int screenSpaceLower = screenSpaceUpper - screenX;
-
-            //* if mouse is in 1st 8th player walks straight left
-            if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
-            {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            //* if mouse is in last 8th player walks straight rigth
-            else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            //* if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
-            else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != loop)
-            {
-
-                if (mouseY < screenY)
-                {
-                    turnVal = 180 - loop;
-                }
-                else if (mouseY > screenY)
-                {
-                    turnVal = 180 + loop;
-                }
-
-                transform.rotation = Quaternion.Euler(0, turnVal, 0);
-            }
-        }
-
-        if (loop > 180)
-        {
-            loop = 0;
-        }
 
 
+    //       _____  ______       _______ _    _    _______     _______ _______ ______ __  __ 
+    //      |  __ \|  ____|   /\|__   __| |  | |  / ____\ \   / / ____|__   __|  ____|  \/  |
+    //      | |  | | |__     /  \  | |  | |__| | | (___  \ \_/ / (___    | |  | |__  | \  / |
+    //      | |  | |  __|   / /\ \ | |  |  __  |  \___ \  \   / \___ \   | |  |  __| | |\/| |
+    //      | |__| | |____ / ____ \| |  | |  | |  ____) |  | |  ____) |  | |  | |____| |  | |
+    //      |_____/|______/_/    \_\_|  |_|  |_| |_____/   |_| |_____/   |_|  |______|_|  |_|
 
-    }
+    //* kills player and opens game over scene
+
+    public static bool death = false;
+    public GameObject hips;
+    public static bool gameIsOver = false;
 
     private void DeathSystem()
     {
@@ -300,33 +602,23 @@ public class PlayerController : MonoBehaviour {
         SceneManager.LoadScene(4);
     }
 
-    private void CoverSystem()
-    {
-        if (Input.GetButtonDown("Cover") && coverAllowed == true)
-        {
-            if (isCovered == true)
-            {
-                isCovered = false;
-                playerAnimator.SetBool("isCovered", true); // [Supposed to] play the animation to cover behind the box.
-                Debug.Log("Player called COVER");
-                playerPos.x = transform.position.x - hidePlane.transform.position.x; // Subtracts the player's X position by the plane's X position. The plane is used for covering.
-                transform.position = new Vector3(playerPos.x, transform.position.y, transform.position.z); // Warps the player to the plane.
-            }
-            else if (isCovered == false)
-            {
-                isCovered = true;
-                playerAnimator.SetBool("isCovered", true); // [Supposed to] return the player back to their idle state.
-                Debug.Log("Player be dying");
-                transform.position = new Vector3(-playerPos.x, transform.position.y, transform.position.z); // Warps the player back to the place they were previously.
-            }
-        }
-    }
+
+
+    //        _____ ____  _      _      _____  _____ _____ ____  _   _      ____________  _____ _____  _____ ______ _____  
+    //       / ____/ __ \| |    | |    |_   _|/ ____|_   _/ __ \| \ | |  __|__  __|  __ \|_   _/ ____|/ ____|  ____|  __ \ 
+    //      | |   | |  | | |    | |      | | | (___   | || |  | |  \| |( _ ) | |  | |__) | | || |  __| |  __| |__  | |__) |
+    //      | |   | |  | | |    | |      | |  \___ \  | || |  | | . ` |/ _ \/\ |  |  _  /  | || | |_ | | |_ |  __| |  _  / 
+    //      | |___| |__| | |____| |____ _| |_ ____) |_| || |__| | |\  | (_>  < |  | | \ \ _| || |__| | |__| | |____| | \ \ 
+    //       \_____\____/|______|______|_____|_____/|_____\____/|_| \_|\___/\/_|  |_|  \_\_____\_____|\_____|______|_|  \_\
+
+    //* detects collisions and triggers and sets veribels to be used by verious systems.
 
     void OnCollisionEnter(Collision hit)
     {
         if (hit.transform.gameObject.tag == "Floor")
         {
             isGrounded = true; // If the player is on the floor, then this boolean is set to true.
+            jumpSwitch = true;
         }
     }
 
@@ -337,22 +629,66 @@ public class PlayerController : MonoBehaviour {
             death = true;
         }
 
-        if (other.tag == "Vaultable")
+        if (other.tag == "Vaultable" || other.tag == "VaultDrag")
         {
             vaultingArea = true;
+
+            Boi = other.gameObject;
         }
 
         if (other.tag == "Cover")
         {
-            coverAllowed = true;
+            hidePlane = other.gameObject;
+        }
+
+        if (other.tag == "Drag" || other.tag == "VaultDrag") // ...and the object's tag is Player...
+        {
+            Box = other.gameObject;
+            dragOn = true;
+        }
+
+        if (other.tag == "Climb")
+        {
+            climbingArea = true;
+        }
+
+        if (other.tag == "CrouchOut")
+        {
+            crouchOutBool = true;
+            Debug.Log("PlayerController | CrouchSystem - Player can not stand here");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Vaultable")
+        if (other.tag == "Vaultable" || other.tag == "VaultDrag")
         {
             vaultingArea = false;
+            Boi = null;
+        }
+
+        if (other.tag == "Drag" || other.tag == "VaultDrag") // ...and the object's tag is Player...
+        {
+            Box = null;
+            dragOn = false;
+        }
+
+        if (other.tag == "Climb")
+        {
+            climbingArea = false;
+        }
+
+        if (other.tag == "Cover")
+        {
+            hidePlane = null;
+        }
+
+        if (other.tag == "CrouchOut")
+        {
+            crouchOutBool = false;
+            Debug.Log("PlayerController | CrouchSystem - Player can stand here");
         }
     }
 }
+
+//* Welcome to 700 lines of hell.

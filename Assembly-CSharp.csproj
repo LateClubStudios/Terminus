@@ -170,9 +170,10 @@
     <Compile Include="Assets\PostProcessing\Runtime\Utils\MaterialFactory.cs" />
     <Compile Include="Assets\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
     <Compile Include="Assets\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
+    <Compile Include="Assets\Scripts\BoxLock.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\CameraParallax.cs" />
-    <Compile Include="Assets\Scripts\DragObject.cs" />
+    <Compile Include="Assets\Scripts\MaintenanceFunctionController.cs" />
     <Compile Include="Assets\Scripts\ObjectTrack.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\RotationLock.cs" />
@@ -220,6 +221,7 @@
     <None Include="Assets\Aura\Shaders\Shaders\Particles\AuraParticlesAlphaBlend.shader" />
     <None Include="Assets\PostProcessing\Resources\Shaders\Common.cginc" />
     <None Include="Assets\PostProcessing\Resources\Bluenoise64\COPYING.txt" />
+    <None Include="Assets\Textures\Shader\ShieldFX.shader" />
     <None Include="Assets\Aura\Shaders\Aura.cginc" />
     <None Include="Assets\PostProcessing\Editor Resources\UI\Trackball.shader" />
     <None Include="Assets\Aura\Shaders\Includes\Structs.cginc" />
