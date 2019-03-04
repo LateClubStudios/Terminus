@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(playerGroundedCheckSet());
 
+        string[] controllers = Input.GetJoystickNames();
+
         playerRigidbody = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
@@ -161,7 +163,7 @@ public class PlayerController : MonoBehaviour
         movementTargetTrack.transform.rotation = transform.rotation;
 
         //* turns sprint on and off
-        if (sprintInputXbox > 0.5 && horizontalInput >= 0 || sprintInputKeyboard == true && horizontalInput >= 0)
+        if (sprintInputXbox > 0.5 && horizontalInput != 0 || sprintInputKeyboard == true && horizontalInput != 0)
         {
             movementSpeed = movementSpeedSprint;
             movementSpeedMax = movementSpeedMaxSprint;
@@ -208,53 +210,66 @@ public class PlayerController : MonoBehaviour
     float turnVal;
     int rotationLoop;
     public static bool rotateSwitch = true;
-
+    float xboxRHor, xboxRVer;
+    string[] controllers;
     private void RotationSystem()
     {
-        for (rotationLoop = 0; rotationLoop <= 180; rotationLoop++)
+        if (controllers == null)
         {
-            float mouseX = Input.mousePosition.x;
-            float mouseY = Input.mousePosition.y;
-
-            int screenXCut = Screen.width / 8;
-
-            int screenXTemp = screenXCut * 6;
-            int screenX = screenXTemp / 180;
-            int screenY = Screen.height / 3;
-
-            int screenSpaceUpper = screenX * rotationLoop + screenXCut;
-            int screenSpaceLower = screenSpaceUpper - screenX;
-
-            // if mouse is in 1st 8th player walks straight left
-            if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
+            Debug.Log("Player Controller | RotationSystem | Controller not connected");
+            for (rotationLoop = 0; rotationLoop <= 180; rotationLoop++)
             {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            // if mouse is in last 8th player walks straight rigth
-            else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            // if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
-            else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != rotationLoop)
-            {
+                float mouseX = Input.mousePosition.x;
+                float mouseY = Input.mousePosition.y;
 
-                if (mouseY < screenY)
+                int screenXCut = Screen.width / 8;
+
+                int screenXTemp = screenXCut * 6;
+                int screenX = screenXTemp / 180;
+                int screenY = Screen.height / 3;
+
+                int screenSpaceUpper = screenX * rotationLoop + screenXCut;
+                int screenSpaceLower = screenSpaceUpper - screenX;
+
+                // if mouse is in 1st 8th player walks straight left
+                if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
                 {
-                    turnVal = 180 - rotationLoop;
+                    transform.rotation = Quaternion.Euler(0, 180, 0);
                 }
-                else if (mouseY > screenY)
+                // if mouse is in last 8th player walks straight rigth
+                else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
                 {
-                    turnVal = 180 + rotationLoop;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
                 }
+                // if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
+                else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != rotationLoop)
+                {
 
-                transform.rotation = Quaternion.Euler(0, turnVal, 0);
+                    if (mouseY < screenY)
+                    {
+                        turnVal = 180 - rotationLoop;
+                    }
+                    else if (mouseY > screenY)
+                    {
+                        turnVal = 180 + rotationLoop;
+                    }
+
+                    transform.rotation = Quaternion.Euler(0, turnVal, 0);
+                }
+            }
+
+            if (rotationLoop > 180)
+            {
+                rotationLoop = 0;
             }
         }
-
-        if (rotationLoop > 180)
+        else if (controllers != null)
         {
-            rotationLoop = 0;
+            Debug.Log("Player Controller | RotationSystem | Controller connected");
+            xboxRHor = Input.GetAxis("RightHorizontal");
+            xboxRVer = Input.GetAxis("RightVertical");
+
+            transform.rotation = Quaternion.Euler(0, transform.rotation.y + xboxRHor * 180, 0);
         }
     }
 
@@ -445,14 +460,6 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("PlayerController | GrabSystem - Player Grabed");
                 boyBeLitAndHoldingTheBox = transform.position;
                 boxStart = Box.transform.position;
-                if (transform.position.z < Box.transform.position.z)
-                {
-                    transform.rotation = new Quaternion(0, 0, 0, 0);
-                }
-                else if (transform.position.z > Box.transform.position.z)
-                {
-                    transform.rotation = new Quaternion(0, 180, 0, 0);
-                }
             }
 
             if (Input.GetButton("Grab"))
@@ -468,6 +475,15 @@ public class PlayerController : MonoBehaviour
                 difrance.z = boyBeLitAndHoldingTheBox.z - transform.position.z;
 
                 Box.transform.position = new Vector3(boxStart.x, boxStart.y, boxStart.z - difrance.z);
+
+                if (transform.position.z < Box.transform.position.z)
+                {
+                    transform.rotation = new Quaternion(0, 0, 0, 0);
+                }
+                else if (transform.position.z > Box.transform.position.z)
+                {
+                    transform.rotation = new Quaternion(0, 180, 0, 0);
+                }
             }
             else
             {
@@ -525,7 +541,7 @@ public class PlayerController : MonoBehaviour
             GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             Debug.Log("PlayerController | CoverSystem - player covered");
             playerAnimator.SetBool("isCovered", true);
-            Legacy = transform.position;
+            //Legacy = transform.position;
             transform.position = hidePlane.transform.position;
         }
         if (Input.GetButtonUp("Cover") && hidePlane != null && covered == true)
@@ -534,7 +550,7 @@ public class PlayerController : MonoBehaviour
             rotateSwitch = true;
             Debug.Log("PlayerController | CoverSystem - Cover system off");
             playerAnimator.SetBool("isCovered", false);
-            transform.position = Legacy;
+            //transform.position = Legacy;
         }
     }
 
