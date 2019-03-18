@@ -125,8 +125,8 @@ public class MainMenu : MonoBehaviour {
 
 	IEnumerator fadeLoad()
 	{
-		transAnim.SetBool ("Started", true);
-		yield return new WaitForSeconds(2.0f);
+		transAnim.SetBool ("animaFadeOut", true);
+		yield return new WaitForSeconds(5.0f);
 		SceneManager.LoadScene(1);
 	}
 }

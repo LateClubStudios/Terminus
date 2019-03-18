@@ -1,7 +1,7 @@
 ﻿//* Starts the train when the player falls
-//* Josh Lennon 
-//* Nov 18 Through Dec 18
-//* For NextGen Synoptic Project Game Outnumbered
+//* Morgan Finney & Josh Lennon 
+//* Nov 18 Through Mar 19
+//* For NextGen Synoptic Project Game Outnumbered`  
 
 using System.Collections;
 using System.Collections.Generic;
@@ -10,33 +10,35 @@ using UnityEngine;
 public class TrainTrigger : MonoBehaviour {
     // Public variables. Gets the player and the train animator.
     public GameObject player;
-    public Animator trainAnim;
 
     // Values for starting player position
 
     void Start()
     {
-        trainAnim = GetComponent<Animator>();               // Gets the animator
-        trainAnim.SetBool("isOnTracks", false);             // Parameter for the animator is set to true. If set to false, the train animation will play once and won't play again unless the player steps into the trigger.
+        GetComponent<Animator>().SetBool("isOnTracks", false);             // Parameter for the animator is set to true. If set to false, the train animation will play once and won't play again unless the player steps into the trigger.
     }
-    void OnTriggerEnter(Collider other)
+
+    private void Update()
     {
-        if (other.gameObject.tag == ("Player"))
-        {
-            trainAnim.SetBool("isOnTracks", true);          // Sets boolean to true so animation can play
-        }
         if (PlayerController.death == true)
         {
-            trainAnim.SetBool("isOnTracks", false);
+            GetComponent<Animator>().SetBool("isOnTracks", false);
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == ("Player"))
+        if (other.gameObject.tag == ("Player") && PlayerController.death == false)
         {
-            PlayerController.death = true;
-            trainAnim.SetBool("isOnTracks", false);
+            StartCoroutine(TrainWait());
         }
+    }
+
+    IEnumerator TrainWait()
+    {
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<Animator>().SetBool("isOnTracks", true);          // Sets boolean to true so animation can play
+        yield return new WaitForEndOfFrame();
+        GetComponent<Animator>().SetBool("isOnTracks", false);          // Sets boolean to true so animation can play
     }
 }

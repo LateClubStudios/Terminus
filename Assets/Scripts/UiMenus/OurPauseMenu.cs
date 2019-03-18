@@ -20,7 +20,8 @@ public class OurPauseMenu : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-		if (Input.GetKeyDown (KeyCode.Escape)) {
+		if (Input.GetButtonDown("Cancel"))
+        {
 			if (gameIsPaused == true && optionsIsOn == false) {
 				Resume ();
 			} else if (gameIsPaused == false && optionsIsOn == false) {

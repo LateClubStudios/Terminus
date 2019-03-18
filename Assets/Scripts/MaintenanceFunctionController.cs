@@ -33,16 +33,17 @@ public class MaintenanceFunctionController : MonoBehaviour {
         yield return new WaitForSeconds(1.0f);
         if (skip == true)
         {
+            StartCoroutine(Delay01());
+        }
+        else
+        {
             playerCollider.enabled = true;
             playerRB.isKinematic = false;
             playerRagdollHips.SetActive(false);
             playerAnimator.enabled = true;
             playerAnimator.SetBool("animaWakeUp", false);
             PlayerController.lockOutAll = false;
-        }
-        else
-        {
-            StartCoroutine(Delay01());
+
         }
     }
 

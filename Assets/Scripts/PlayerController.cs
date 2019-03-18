@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRigidbody;
     private Animator playerAnimator;
     private CapsuleCollider playerCollider;
+    string[] controllers;
 
 
     // dont know what these are for this is why we should name stuff properly
@@ -30,11 +31,11 @@ public class PlayerController : MonoBehaviour
 
 
 
-    void Start()
+    void Awake()
     {
         StartCoroutine(playerGroundedCheckSet());
 
-        string[] controllers = Input.GetJoystickNames();
+        controllers = Input.GetJoystickNames();
 
         playerRigidbody = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
@@ -47,17 +48,23 @@ public class PlayerController : MonoBehaviour
     {
         FovSystem();
         CameraSystem();
-
-        if (lockOutAll != true)
+        DeathSystem();
+        if (lockOutAll != true && death != true)
         {
+            if (jumpSwitch == true)
+            {
+                JumpSystem();
 
-            JumpSystem();
-            CrouchSystem();
+            }
+            if (crouchSwitch == true)
+            {
+                CrouchSystem();
+            }
             AttackSystem();
             CoverSystem();
 
             DeathSystem();
-            if (covered != true)
+            if (covered != true && movementSwitch == true)
             {
                 MovementSystem();
             }
@@ -144,16 +151,17 @@ public class PlayerController : MonoBehaviour
 
     //* moves the player, basiclly sprint and walk.
 
+    public static bool movementSwitch = true;
     private bool sprintInputKeyboard;
     private float horizontalInput, movementSpeed, sprintInputXbox, movementSpeedMax, movementSpeedWalk = 10000, movementSpeedSprint = 16000, movementSpeedMaxWalk = 1.25f, movementSpeedMaxSprint = 2.75f;
-    public Transform movementTargetTrack, movementTarget;
+    public Transform movementTargetTrack, movementTarget, xboxTargetTrack;
     Vector3 movementTargetDirection, movementClamp;
 
     private void MovementSystem()
     {
         //* sets veribels based on certain inputs
-        sprintInputXbox = Input.GetAxis("Sprint");
-        sprintInputKeyboard = Input.GetButtonDown("Sprint");
+        ////sprintInputXbox = Input.GetAxis("Sprint");
+        //sprintInputKeyboard = Input.GetButton("Sprint");
         horizontalInput = Input.GetAxis("Horizontal");
 
         //* moves movment force target 
@@ -162,14 +170,22 @@ public class PlayerController : MonoBehaviour
         movementTargetTrack.transform.position = transform.position;
         movementTargetTrack.transform.rotation = transform.rotation;
 
+        xboxTargetTrack.transform.position = transform.position;
+        xboxTargetTrack.transform.rotation = transform.rotation;
+
         //* turns sprint on and off
-        if (sprintInputXbox > 0.5 && horizontalInput != 0 || sprintInputKeyboard == true && horizontalInput != 0)
+        if (Input.GetButton("Sprint") && horizontalInput > 0.5f/*sprintInputXbox > 0.5f && horizontalInput > 0 || sprintInputKeyboard == true && horizontalInput >= 0*/) // Turns the sprint on
         {
             movementSpeed = movementSpeedSprint;
             movementSpeedMax = movementSpeedMaxSprint;
             playerAnimator.SetBool("isSprint", true);
         }
-        else if (sprintInputXbox < 0.5 || sprintInputKeyboard == false)
+        else if (Input.GetButton("Sprint") && horizontalInput < -0.5f/*sprintInputKeyboard == true && horizontalInput <= -0.5f*/)
+        {
+            movementSpeed = movementSpeedWalk;
+            movementSpeedMax = movementSpeedMaxWalk;
+        }
+        else if (Input.GetButton("Sprint") == false/*sprintInputXbox == 0 && horizontalInput == 0 || sprintInputKeyboard == false*/) // Turns the sprint off
         {
             movementSpeed = movementSpeedWalk;
             movementSpeedMax = movementSpeedMaxWalk;
@@ -181,15 +197,32 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<Rigidbody>().AddForce(movementTargetDirection * movementSpeed * Time.deltaTime);
             playerAnimator.SetBool("isWalk", true);
+            if (movementSpeed == movementSpeedSprint)
+            {
+                playerAnimator.SetFloat("Direction", 1, 1f, Time.deltaTime * 10f);
+            }
+            else
+            {
+                playerAnimator.SetFloat("Direction", 0.5f,1f, Time.deltaTime * 10f);
+            }
         }
         else if (horizontalInput < 0)
         {
             GetComponent<Rigidbody>().AddForce(-movementTargetDirection * movementSpeedWalk * Time.deltaTime);
             playerAnimator.SetBool("isWalk", true);
+            if (movementSpeed == -movementSpeedSprint)
+            {
+                playerAnimator.SetFloat("Direction", -1, 1f, Time.deltaTime * 10f);
+            }
+            else
+            {
+                playerAnimator.SetFloat("Direction", -0.5f, 1f, Time.deltaTime * 10f);
+            }
         }
         else if (horizontalInput == 0)
         {
             playerAnimator.SetBool("isWalk", false);
+            playerAnimator.SetFloat("Direction", 0, 1f, Time.deltaTime * 10f);
         }
 
         //* stops the player going to fast
@@ -210,66 +243,119 @@ public class PlayerController : MonoBehaviour
     float turnVal;
     int rotationLoop;
     public static bool rotateSwitch = true;
-    float xboxRHor, xboxRVer;
-    string[] controllers;
+    public float xboxRHor, xboxRVer;
+    public GameObject XboxAim;
+    float rotSpeed = 200000;
+    int i;
+
+
     private void RotationSystem()
     {
-        if (controllers == null)
+        controllers = Input.GetJoystickNames();
+        if (controllers.Length > 0)
         {
-            Debug.Log("Player Controller | RotationSystem | Controller not connected");
-            for (rotationLoop = 0; rotationLoop <= 180; rotationLoop++)
+            //Iterate over every element
+            //for (i = 0; i < controllers.Length; ++i)
+            //{
+                //Check if the string is empty or not
+                if (!string.IsNullOrEmpty(controllers[i]))
+                {
+                    RotationSystemXbox();
+                }
+                else
+                {
+                    RotationSystemMouse();
+                }
+            //}
+        }
+        else
+        {
+            RotationSystemMouse();
+        }
+
+    }
+
+    private void RotationSystemXbox()
+    {
+        //Not empty, controller temp[i] is connected
+        Debug.Log("Controller " + i + " is connected using: " + controllers[i]);
+
+        Debug.Log("Player Controller | RotationSystem | Controller connected");
+        xboxRHor = Input.GetAxis("RightHorizontal") + 1;
+        xboxRVer = Input.GetAxis("RightVertical") + 1;
+
+        if (xboxRHor > 0.1 || xboxRVer > 0.1)
+        {
+
+            float playerX, playerZ;
+            playerX = transform.position.x + 1;
+            playerZ = transform.position.z - 1;
+            XboxAim.transform.position = new Vector3(playerX - xboxRVer, transform.position.y, playerZ + xboxRHor);
+
+            Vector3 targetDir = XboxAim.transform.position - transform.position;
+
+            // The step size is equal to speed times frame time.
+            float step = rotSpeed * Time.deltaTime;
+
+            Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+            Debug.DrawRay(transform.position, newDir, Color.red);
+
+            // Move our position a step closer to the target.
+            transform.rotation = Quaternion.LookRotation(newDir);
+        }
+    }
+
+    private void RotationSystemMouse()
+    {
+        //If it is empty, controller i is disconnected
+        //where i indicates the controller number
+        Debug.Log("Controller: " + i + " is disconnected.");
+
+        Debug.Log("Player Controller | RotationSystem | Controller not connected");
+        for (rotationLoop = 0; rotationLoop <= 180; rotationLoop++)
+        {
+            float mouseX = Input.mousePosition.x;
+            float mouseY = Input.mousePosition.y;
+
+            int screenXCut = Screen.width / 8;
+
+            int screenXTemp = screenXCut * 6;
+            int screenX = screenXTemp / 180;
+            int screenY = Screen.height / 3;
+
+            int screenSpaceUpper = screenX * rotationLoop + screenXCut;
+            int screenSpaceLower = screenSpaceUpper - screenX;
+
+            // if mouse is in 1st 8th player walks straight left
+            if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
             {
-                float mouseX = Input.mousePosition.x;
-                float mouseY = Input.mousePosition.y;
-
-                int screenXCut = Screen.width / 8;
-
-                int screenXTemp = screenXCut * 6;
-                int screenX = screenXTemp / 180;
-                int screenY = Screen.height / 3;
-
-                int screenSpaceUpper = screenX * rotationLoop + screenXCut;
-                int screenSpaceLower = screenSpaceUpper - screenX;
-
-                // if mouse is in 1st 8th player walks straight left
-                if (mouseX < screenXCut && transform.rotation != Quaternion.Euler(0, 180, 0))
-                {
-                    transform.rotation = Quaternion.Euler(0, 180, 0);
-                }
-                // if mouse is in last 8th player walks straight rigth
-                else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
-                {
-                    transform.rotation = Quaternion.Euler(0, 0, 0);
-                }
-                // if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
-                else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != rotationLoop)
-                {
-
-                    if (mouseY < screenY)
-                    {
-                        turnVal = 180 - rotationLoop;
-                    }
-                    else if (mouseY > screenY)
-                    {
-                        turnVal = 180 + rotationLoop;
-                    }
-
-                    transform.rotation = Quaternion.Euler(0, turnVal, 0);
-                }
+                transform.rotation = Quaternion.Euler(0, 180, 0);
             }
-
-            if (rotationLoop > 180)
+            // if mouse is in last 8th player walks straight rigth
+            else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
             {
-                rotationLoop = 0;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            // if mouse is between first and last 8th player walks on angle dependent on position between the 8th's
+            else if (mouseX > screenXCut && mouseX < screenXCut * 7 && mouseX < screenSpaceUpper && mouseX > screenSpaceLower && turnVal != rotationLoop)
+            {
+
+                if (mouseY < screenY)
+                {
+                    turnVal = 180 - rotationLoop;
+                }
+                else if (mouseY > screenY)
+                {
+                    turnVal = 180 + rotationLoop;
+                }
+
+                transform.rotation = Quaternion.Euler(0, turnVal, 0);
             }
         }
-        else if (controllers != null)
-        {
-            Debug.Log("Player Controller | RotationSystem | Controller connected");
-            xboxRHor = Input.GetAxis("RightHorizontal");
-            xboxRVer = Input.GetAxis("RightVertical");
 
-            transform.rotation = Quaternion.Euler(0, transform.rotation.y + xboxRHor * 180, 0);
+        if (rotationLoop > 180)
+        {
+            rotationLoop = 0;
         }
     }
 
@@ -299,16 +385,23 @@ public class PlayerController : MonoBehaviour
 
     private void JumpSystem()
     {
+        playerAnimator.SetFloat("Height", playerPos.y);
+
         if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false && climbingArea == false)
         {
             isGrounded = false;
             GetComponent<Rigidbody>().AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            playerAnimator.SetBool("isJump", true);
         }
         else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true && climbingArea == false)
         {
             isGrounded = false;
             transform.position = new Vector3(Boi.transform.position.x, Boi.transform.position.x + 1.8f, Boi.transform.position.z + 0.75f);
             vaultingArea = false;
+        }
+        else if (Input.GetButtonUp("Jump"))
+        {
+            playerAnimator.SetBool("isJump", false);
         }
 
 
@@ -393,6 +486,7 @@ public class PlayerController : MonoBehaviour
     bool crouchTimeout = false;
     bool crouchTimeoutOnce = false;
     bool crouchOutBool = false;
+    public static bool crouchSwitch = true;
 
     private void CrouchSystem()
     {
@@ -402,8 +496,20 @@ public class PlayerController : MonoBehaviour
             playerCollider.height = 1.0f;
             playerCollider.center = new Vector3(0f, 0.6f, 0f);
             playerAnimator.SetBool("isCrouch", true);
+            if (movementSpeed > 0)
+            {
+                playerAnimator.SetFloat("Direction", 0.5f, 1f, Time.deltaTime * 10f);
+            }
+            else if (movementSpeed < 0)
+            {
+                playerAnimator.SetFloat("Direction", -0.5f, 1f, Time.deltaTime * 10f);
+            }
+            else
+            {
+                playerAnimator.SetFloat("Direction", 0f, 1f, Time.deltaTime * 10f);
+            }
             crouchTimeout = true;
-
+         
         }
 
         if (crouchTimeout == true && crouchTimeoutOnce == false)
@@ -565,16 +671,33 @@ public class PlayerController : MonoBehaviour
 
     //* allows the player to attack
 
+    bool bandit = false;
+
     private void AttackSystem()
     {
         if (Input.GetButtonDown("Attack"))
         {
+            movementSwitch = false;
+            crouchSwitch = false;
+            jumpSwitch = false;
             playerAnimator.SetBool("isAttack", true);
+            float floatRand = Random.Range(1f,3f);
+            float intRound = Mathf.Round(floatRand);
+
+            playerAnimator.SetFloat("Attack", intRound);
+
+            if(bandit == true)
+            {
+                Bandits.banditDeath = true;
+            }
         }
 
         if (Input.GetButtonUp("Attack"))
         {
             playerAnimator.SetBool("isAttack", false);
+            movementSwitch = true;
+            crouchSwitch = true;
+            jumpSwitch = true;
         }
     }
 
@@ -592,6 +715,7 @@ public class PlayerController : MonoBehaviour
     public static bool death = false;
     public GameObject hips;
     public static bool gameIsOver = false;
+    public Animator transAnim;
 
     private void DeathSystem()
     {
@@ -614,7 +738,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator gOverScene()
     {
-        yield return new WaitForSeconds(2.0f);
+        transAnim.SetBool("animaFadeOut", true);
+        yield return new WaitForSeconds(5.0f);
         SceneManager.LoadScene(4);
     }
 
@@ -636,10 +761,27 @@ public class PlayerController : MonoBehaviour
             isGrounded = true; // If the player is on the floor, then this boolean is set to true.
             jumpSwitch = true;
         }
+
+        if (hit.transform.gameObject.tag == "Kill")
+        {
+            death = true;
+        }
+
+        if (hit.transform.gameObject.tag == "Bandit")
+        {
+            Debug.Log("Player At Bandit");
+            bandit = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Bandit")
+        {
+            Debug.Log("Player At Bandit");
+            bandit = true;
+        }
+
         if (other.tag == "Kill")
         {
             death = true;
@@ -707,4 +849,4 @@ public class PlayerController : MonoBehaviour
     }
 }
 
-//* Welcome to 700 lines of hell.
+//* Welcome to 827 lines of hell.
