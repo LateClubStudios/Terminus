@@ -1,16 +1,16 @@
 ﻿//* Main Controller for player - jump, move, crouch, sprint, cover and stop on pause. 
 //* Morgan Joshua Finney & Josh Lennon 
 //* Sep 18 Through Feb 19
-//* For NextGen Synoptic Project Game Outnumbered
+/// For NextGen Synoptic Project Game Outnumbered
 
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement; // Used for managing scene transitions.
 
 public class PlayerController : MonoBehaviour
 {
 
-    public static bool lockOutAll = true;
+    public static bool lockOutAll = true; // Locks the entire player script. Static because it is referenced in other scripts.
 
     // Private variables. Getting the player's rigid body, animator, and collider.
     private Rigidbody playerRigidbody;
@@ -20,18 +20,18 @@ public class PlayerController : MonoBehaviour
 
 
     // dont know what these are for this is why we should name stuff properly
-    private bool gamePaused;
-    private float oldSpeed;
-    Vector3 Legacy;
-    public GameObject Boi;
-    float difrance2;
-    bool covered;
+    private bool gamePaused; // This is the boolean to check if the game is paused. Is unused.
+    private float oldSpeed; // This was initially used for storing speed. Is unused.
+    Vector3 Legacy; // Initally stored the player's previous position before he warped to the cover plane. Is unused.
+    public GameObject boxAttach; // Used for attaching the box. Is used.
+    float difrance2; // Supposedly gets the distance between two objects. Goes unused.
+    bool covered; // Used for the cover system. Determines whether or not the player is covered or not. Is used.
+
+    // Don't delete these so we can reference them in our blogs.
 
 
 
-
-
-    void Awake()
+    void Awake() // Starts as soon as the game is loaded
     {
         StartCoroutine(playerGroundedCheckSet());
 
@@ -41,13 +41,14 @@ public class PlayerController : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
         movementSpeed = movementSpeedWalk;
-
+        // Setting variables at the beginning to certain values and components
     }
 
-    void Update()
+    void Update() // Contains all of the gameplay mechanics the player uses. Uses if statements and booleans to determine when these systems should be used.
     {
         FovSystem();
         CameraSystem();
+        RagdollSystem();
         DeathSystem();
         if (lockOutAll != true && death != true)
         {
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
             GrabSystem();
 
-            if (death == false && gameIsOver == false && rotateSwitch == true)
+            if (death == false && gameIsOver == false && rotateSwitch == true && rotateSwitch2 == true)
             {
                 RotationSystem();
             }
@@ -134,10 +135,25 @@ public class PlayerController : MonoBehaviour
     //* Changes the main cameras y and z position based on the players y and z position.
 
     public Transform cameraTrack;
+    float tempX, tempY, tempZ;
 
     private void CameraSystem()
     {
-        cameraTrack.transform.position = new Vector3(cameraTrack.transform.position.x, transform.position.y, transform.position.z);
+        tempX = Mathf.Lerp(tempX, hips.transform.position.x, 0.1f);
+        tempY = Mathf.Lerp(tempY, hips.transform.position.y, 0.1f);
+        tempZ = Mathf.Lerp(tempZ, hips.transform.position.z, 0.1f);
+
+        cameraTrack.transform.position = new Vector3(tempX, tempY - 1, tempZ);
+
+        //if (hipsTrack == true)
+        //{
+        //    cameraTrack.transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y - 1, hips.transform.position.z);
+        //}
+        //else
+        //{
+
+        //    cameraTrack.transform.position = new Vector3(cameraTrack.transform.position.x, transform.position.y, transform.position.z);
+        //}
     }
 
 
@@ -149,22 +165,22 @@ public class PlayerController : MonoBehaviour
     //    | |  | | |__| | \  /  | |____| |  | | |____| |\  |  | |     ____) |  | |  ____) |  | |  | |____| |  | |
     //    |_|  |_|\____/   \/   |______|_|  |_|______|_| \_|  |_|    |_____/   |_| |_____/   |_|  |______|_|  |_|
 
-    //* moves the player, basiclly sprint and walk.
+    //* moves the player, basically sprint and walk.
 
     public static bool movementSwitch = true;
     private bool sprintInputKeyboard;
-    private float horizontalInput, movementSpeed, sprintInputXbox, movementSpeedMax, movementSpeedWalk = 10000, movementSpeedSprint = 16000, movementSpeedMaxWalk = 1.25f, movementSpeedMaxSprint = 2.75f;
+    private float horizontalInput, movementSpeed, sprintInputXbox, movementSpeedMax, movementSpeedWalk = 10000, movementSpeedSprint = 12500, movementSpeedMaxWalk = 1.25f, movementSpeedMaxSprint = 2.75f;
     public Transform movementTargetTrack, movementTarget, xboxTargetTrack;
     Vector3 movementTargetDirection, movementClamp;
 
     private void MovementSystem()
     {
-        //* sets veribels based on certain inputs
-        ////sprintInputXbox = Input.GetAxis("Sprint");
-        //sprintInputKeyboard = Input.GetButton("Sprint");
+        //* sets variables based on certain inputs
+        sprintInputXbox = Input.GetAxis("Sprint");
+        sprintInputKeyboard = Input.GetButton("Sprint");
         horizontalInput = Input.GetAxis("Horizontal");
 
-        //* moves movment force target 
+        //* moves the player using physics and force 
         movementTargetDirection = movementTarget.position - transform.position;
         movementTargetDirection = movementTargetDirection.normalized;
         movementTargetTrack.transform.position = transform.position;
@@ -174,7 +190,7 @@ public class PlayerController : MonoBehaviour
         xboxTargetTrack.transform.rotation = transform.rotation;
 
         //* turns sprint on and off
-        if (Input.GetButton("Sprint") && horizontalInput > 0.5f/*sprintInputXbox > 0.5f && horizontalInput > 0 || sprintInputKeyboard == true && horizontalInput >= 0*/) // Turns the sprint on
+        if (Input.GetButton("Sprint") && horizontalInput > 0.5f || sprintInputKeyboard == true && horizontalInput >= 0) // Turns the sprint on
         {
             movementSpeed = movementSpeedSprint;
             movementSpeedMax = movementSpeedMaxSprint;
@@ -203,7 +219,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                playerAnimator.SetFloat("Direction", 0.5f,1f, Time.deltaTime * 10f);
+                playerAnimator.SetFloat("Direction", 0.5f, 1f, Time.deltaTime * 10f);
             }
         }
         else if (horizontalInput < 0)
@@ -257,15 +273,15 @@ public class PlayerController : MonoBehaviour
             //Iterate over every element
             //for (i = 0; i < controllers.Length; ++i)
             //{
-                //Check if the string is empty or not
-                if (!string.IsNullOrEmpty(controllers[i]))
-                {
-                    RotationSystemXbox();
-                }
-                else
-                {
-                    RotationSystemMouse();
-                }
+            //Check if the string is empty or not
+            if (!string.IsNullOrEmpty(controllers[i]))
+            {
+                RotationSystemXbox();
+            }
+            else
+            {
+                RotationSystemMouse();
+            }
             //}
         }
         else
@@ -331,7 +347,7 @@ public class PlayerController : MonoBehaviour
             {
                 transform.rotation = Quaternion.Euler(0, 180, 0);
             }
-            // if mouse is in last 8th player walks straight rigth
+            // if mouse is in last 8th player walks straight right
             else if (mouseX > screenXCut * 7 && transform.rotation != Quaternion.Euler(0, 0, 0))
             {
                 transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -379,13 +395,150 @@ public class PlayerController : MonoBehaviour
     public bool climbingArea;
     bool beTheClimbing = false;
 
-    bool vaultingArea = false;
+    [SerializeField] bool vaultingArea = false;
     public Vector3 startPos = new Vector3(0f, 0f, 0f);
     public Vector3 endPos = new Vector3(0f, 1.5f, 0.75f);
 
+    bool hipsTrack = false;
+
+    bool rotateSwitch2 = true;
+    bool vaultingAboveNot = true;
+
+	Vector3 test;
+    IEnumerator Vault01()
+    {
+        yield return new WaitForSeconds(1.0f);
+        playerAnimator.SetBool("isVault", false);
+        yield return new WaitForSeconds(1.26f);
+        hipsTrack = false;
+        transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y - 0.1f, hips.transform.position.z);
+        hips.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        rotateSwitch2 = true;
+        jumpSwitch = true;
+        movementSwitch = true;
+    }
+
+    bool climbUp = false, climbDown = false;
+
+    private void ClimbingSystem()
+    {
+        if (climbingArea == true)
+        {
+            GetComponent<Rigidbody>().useGravity = false;
+            
+            if (Input.GetButton("Jump") == true)
+            {
+                climbUp = true;
+                climbDown = false;
+            }
+            else if (Input.GetButton("Jump") == false)
+            {
+                if (isGrounded != true)
+                {
+                    climbUp = false;
+                    climbDown = true;
+                }
+                else if (isGrounded == true)
+                {
+                    climbUp = false;
+                    climbDown = false;
+                }
+
+            }
+        }
+        else
+        {
+            climbUp = false;
+            climbDown = false;
+
+            rotateSwitch = true;
+            GetComponent<Rigidbody>().useGravity = true;
+            playerAnimator.SetBool("isClimbing", false);
+        }
+
+
+        if (climbUp == true)
+        {
+            rotateSwitch = false;
+            transform.rotation = new Quaternion(0, 180, 0, 0);
+            Debug.Log("PlayerController | ClimbingSystem - Climbing Force");
+            isGrounded = false;
+            GetComponent<Rigidbody>().AddForce(Vector3.up * movementSpeedClimb * Time.deltaTime);
+            Vector3 temp2 = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedClimbMax);
+            GetComponent<Rigidbody>().velocity = new Vector3(movementClamp.x, movementClamp.y, movementClamp.z);
+
+            playerAnimator.SetFloat("UpOrDown", 0);
+            playerAnimator.SetBool("isClimbing", true);
+        }
+        else if (climbDown == true)
+        {
+            rotateSwitch = false;
+            transform.rotation = new Quaternion(0, 180, 0, 0);
+            Debug.Log("PlayerController | ClimbingSystem - Climbing Force");
+            isGrounded = false;
+            GetComponent<Rigidbody>().AddForce(-Vector3.up * movementSpeedClimb * Time.deltaTime);
+            Vector3 temp2 = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedClimbMax);
+            GetComponent<Rigidbody>().velocity = new Vector3(movementClamp.x, movementClamp.y, movementClamp.z);
+
+            playerAnimator.SetFloat("UpOrDown", 1);
+            playerAnimator.SetBool("isClimbing", true);
+        }
+        else
+        {
+            rotateSwitch = true;
+            playerAnimator.SetBool("isClimbing", false);
+        }
+
+
+        //Legacy system
+        //if (Input.GetButtonDown("Jump") && vaultingArea == false && climbingArea == true)
+        //{
+        //    beTheClimbing = true;
+        //    playerAnimator.SetBool("isClimbing", true);
+        //    playerAnimator.SetFloat("UpOrDown", 0);
+        //}
+        //else if (Input.GetButtonUp("Jump") && beTheClimbing == true || climbingArea == false && beTheClimbing == true)
+        //{
+        //    //rotateSwitch = true;
+        //    playerAnimator.SetFloat("UpOrDown", 1);
+        //    beTheClimbing = false;
+        //    Debug.Log("Player Controller | ClimbingSystem() | Climbing off");
+        //}
+        //if (climbingArea == false)
+        //{
+        //    playerAnimator.SetBool("isClimbing", false);
+        //}
+
+        //if (beTheClimbing == true)
+        //{
+        //    rotateSwitch = false;
+        //    transform.rotation = new Quaternion(0, 180, 0, 0);
+        //    Debug.Log("PlayerController | ClimbingSystem - Climbing Force");
+        //    isGrounded = false;
+        //    GetComponent<Rigidbody>().AddForce(Vector3.up * movementSpeedClimb * Time.deltaTime);
+
+        //    Vector3 temp2 = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedClimbMax);
+        //    GetComponent<Rigidbody>().velocity = new Vector3(movementClamp.x, movementClamp.y, movementClamp.z);
+        //    Debug.Log("Player Controller | Player's movement locked, fall you fucking cunt");
+        //}
+    }
+
+
+
     private void JumpSystem()
     {
-        playerAnimator.SetFloat("Height", playerPos.y);
+        ClimbingSystem();
+
+        playerAnimator.SetFloat("Height", transform.position.y);
+
+        if (vaultingArea == true && transform.position.y > boxAttach.transform.position.y)
+        {
+            vaultingAboveNot = false;
+        }
+        else
+        {
+            vaultingAboveNot = true;
+        }
 
         if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == false && climbingArea == false)
         {
@@ -393,11 +546,26 @@ public class PlayerController : MonoBehaviour
             GetComponent<Rigidbody>().AddForce(transform.up * jumpForce, ForceMode.Impulse);
             playerAnimator.SetBool("isJump", true);
         }
-        else if (Input.GetButtonDown("Jump") && isGrounded == true && vaultingArea == true && climbingArea == false)
+        else if (Input.GetButtonDown("Jump") /*&& isGrounded == true*/ && vaultingArea == true && climbingArea == false && vaultingAboveNot == true)
         {
             isGrounded = false;
-            transform.position = new Vector3(Boi.transform.position.x, Boi.transform.position.x + 1.8f, Boi.transform.position.z + 0.75f);
+            rotateSwitch2 = false;
+            jumpSwitch = false;
+            movementSwitch = false;
+
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            
+            test = new Vector3 (boxAttach.transform.position.x, transform.position.y, boxAttach.transform.position.z);
+
+            transform.LookAt(test);
+
+
+
+            playerAnimator.SetBool("isVault", true);
+            hipsTrack = true;
             vaultingArea = false;
+            StartCoroutine("Vault01");
         }
         else if (Input.GetButtonUp("Jump"))
         {
@@ -405,30 +573,11 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetButtonDown("Jump") && vaultingArea == false && climbingArea == true)
-        {
-            beTheClimbing = true;
-            playerAnimator.SetBool("isClimbing", true);
-        }
-        else if (Input.GetButtonUp("Jump") && beTheClimbing == true || climbingArea == false && beTheClimbing == true)
-        {
-            beTheClimbing = false;
-            playerAnimator.SetBool("isClimbing", false);
-            rotateSwitch = true;
-            Debug.Log("Player Controller | ClimbingSystem() | Climbing off");
-        }
+       
 
-        if (beTheClimbing == true)
+        if (isGrounded == true)
         {
-            rotateSwitch = false;
-            transform.rotation = new Quaternion(0, 180, 0, 0);
-            Debug.Log("PlayerController | ClimbingSystem - Climbing Force");
-            isGrounded = false;
-            GetComponent<Rigidbody>().AddForce(Vector3.up * movementSpeedClimb * Time.deltaTime);
-
-            Vector3 temp2 = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, movementSpeedClimbMax);
-            GetComponent<Rigidbody>().velocity = new Vector3(movementClamp.x, movementClamp.y, movementClamp.z);
-            Debug.Log("Player Controller | Player's movement locked, fall you fucking cunt");
+            playerAnimator.SetBool("isJump", false);
         }
     }
 
@@ -449,7 +598,7 @@ public class PlayerController : MonoBehaviour
     {
         if (transform.position.y < lastHight + 0.00005f && transform.position.y > lastHight - 0.00005f)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(2.0f);
             Debug.Log("PlayerController | PlayerGroundCheck - Player is Last Height");
             isGrounded = true; // If the player is on the floor, then this boolean is set to true.
         }
@@ -570,6 +719,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetButton("Grab"))
             {
+                playerAnimator.SetBool("isDrag", true);
                 Debug.Log("PlayerController | GrabSystem - Grab Movment");
 
                 Box.GetComponent<Rigidbody>().mass = 0;
@@ -594,6 +744,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Debug.Log("PlayerController | GrabSystem - Box UnGrabbed");
+                playerAnimator.SetBool("isDrag", false);
 
                 if (Box != null)
                 {
@@ -609,6 +760,7 @@ public class PlayerController : MonoBehaviour
         else if (dragOn == false && Input.GetButton("Grab"))
         {
             Debug.Log("PlayerController | GrabSystem - Box UnGrabbed");
+            playerAnimator.SetBool("isDrag", false);
 
             if (Box != null)
             {
@@ -671,37 +823,58 @@ public class PlayerController : MonoBehaviour
 
     //* allows the player to attack
 
+    public static Bandits banditScript;
+    public static bool attackActive = false;
     bool bandit = false;
+    public static GameObject banditObj;
+    bool attackCooldown = false;
 
     private void AttackSystem()
     {
-        if (Input.GetButtonDown("Attack"))
+        Debug.Log(string.Format("Bandit: {0}", banditObj));
+
+        if (Input.GetButtonDown("Attack") && attackCooldown == false)
         {
-            movementSwitch = false;
+            attackActive = true;
+            //movementSwitch = false;
             crouchSwitch = false;
             jumpSwitch = false;
+            rotateSwitch = false;
             playerAnimator.SetBool("isAttack", true);
+            attackCooldown = true;
+            Invoke("ResetCooldown", 1.0f);
             float floatRand = Random.Range(1f,3f);
             float intRound = Mathf.Round(floatRand);
 
             playerAnimator.SetFloat("Attack", intRound);
 
-            if(bandit == true)
+            if (bandit == true && banditObj != null)
             {
-                Bandits.banditDeath = true;
+                banditScript = banditObj.GetComponent<Bandits>();
             }
         }
 
         if (Input.GetButtonUp("Attack"))
         {
             playerAnimator.SetBool("isAttack", false);
-            movementSwitch = true;
-            crouchSwitch = true;
-            jumpSwitch = true;
+            StartCoroutine("AttackTimer");
         }
     }
 
+    IEnumerator AttackTimer()
+    {
+        yield return new WaitForSeconds(1.0f);
+        attackActive = false;
+        //movementSwitch = true;
+        crouchSwitch = true;
+        jumpSwitch = true;
+        rotateSwitch = true;
+    }
 
+    void ResetCooldown()
+    {
+        attackCooldown = false;
+    }
 
     //       _____  ______       _______ _    _    _______     _______ _______ ______ __  __ 
     //      |  __ \|  ____|   /\|__   __| |  | |  / ____\ \   / / ____|__   __|  ____|  \/  |
@@ -717,22 +890,55 @@ public class PlayerController : MonoBehaviour
     public static bool gameIsOver = false;
     public Animator transAnim;
 
+    public static bool ragdollMe = false;
+    public static bool ragdollToggle = false;
+
+    private void RagdollSystem()
+    {
+        if (ragdollToggle == true)
+        {Debug.Log("RAGon");
+            Collider[] bodies = hips.GetComponentsInChildren<Collider>();
+
+            //For each of the components in the array, treat the component as a Rigidbody and set its isKinematic property
+            foreach (Collider rb in bodies)
+            {
+                rb.isTrigger = false;
+            }
+            GetComponent<Rigidbody>().isKinematic = true;
+            ragdollMe = true;
+
+            
+        }
+        else if (ragdollToggle == false)
+        {Debug.Log("RAGoff");
+            Collider[] bodies = hips.GetComponentsInChildren<Collider>();
+
+            //For each of the components in the array, treat the component as a Rigidbody and set its isKinematic property
+            foreach (Collider rb in bodies)
+            {
+                rb.isTrigger = true;
+            }
+
+            ragdollMe = false;
+            GetComponent<Rigidbody>().isKinematic = false;
+            
+        }
+    }
+
+
     private void DeathSystem()
     {
         if (death == true)
         {
 
             PlayerController.gameIsOver = true;
-            playerAnimator.enabled = false;
-            hips.SetActive(true);
+            ragdollToggle = true;
             StartCoroutine(gOverScene());
 
         }
         else if (death == false)
         {
             PlayerController.gameIsOver = false;
-            playerAnimator.enabled = true;
-            hips.SetActive(false);
         }
     }
 
@@ -769,6 +975,7 @@ public class PlayerController : MonoBehaviour
 
         if (hit.transform.gameObject.tag == "Bandit")
         {
+            banditObj = hit.gameObject;
             Debug.Log("Player At Bandit");
             bandit = true;
         }
@@ -778,6 +985,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "Bandit")
         {
+            banditObj = other.gameObject;
             Debug.Log("Player At Bandit");
             bandit = true;
         }
@@ -791,7 +999,7 @@ public class PlayerController : MonoBehaviour
         {
             vaultingArea = true;
 
-            Boi = other.gameObject;
+            boxAttach = other.gameObject;
         }
 
         if (other.tag == "Cover")
@@ -817,18 +1025,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Bandit")
+        {
+            banditObj = other.gameObject;
+
+            if (attackActive == true)
+            {
+                transform.LookAt(banditObj.transform);
+            }
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
+
+        if (other.tag == "Bandit")
+        {
+            banditObj = null;
+            Debug.Log("Player At Bandit");
+            bandit = false;
+        }
+
         if (other.tag == "Vaultable" || other.tag == "VaultDrag")
         {
             vaultingArea = false;
-            Boi = null;
-        }
-
-        if (other.tag == "Drag" || other.tag == "VaultDrag") // ...and the object's tag is Player...
-        {
-            Box = null;
-            dragOn = false;
+            boxAttach = null;
         }
 
         if (other.tag == "Climb")
@@ -849,4 +1072,5 @@ public class PlayerController : MonoBehaviour
     }
 }
 
-//* Welcome to 827 lines of hell.
+//* Welcome to 1000 lines of hell.
+//* So guys, we did it. We reached 1,000 lines of hell - a quarter of 4,000 lines of hell and still counting. The fact that we reached this number in such a short amount of time is phenomenal - I'm just amazed at how quick we reached this milestone.

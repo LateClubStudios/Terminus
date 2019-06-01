@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: 5e3400807748942661ed6543957c1e3f
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Fence001
+    100002: Fence002
+    100004: Fence003
+    100006: Fence004
+    100008: Hatch
+    100010: MeshBridge001
+    100012: MeshBridge002
+    100014: //RootNode
+    100016: MeshFloor001
+    100018: MeshFloor002
+    100020: MeshFloor003
+    100022: MeshFloor004
+    100024: MeshFloor005
+    400000: Fence001
+    400002: Fence002
+    400004: Fence003
+    400006: Fence004
+    400008: Hatch
+    400010: MeshBridge001
+    400012: MeshBridge002
+    400014: //RootNode
+    400016: MeshFloor001
+    400018: MeshFloor002
+    400020: MeshFloor003
+    400022: MeshFloor004
+    400024: MeshFloor005
+    2100000: HatchWood
+    2100002: HatchMetal
+    2100004: MeshFloor
+    2100006: MeshBridge
+    2100008: Fence
+    2300000: Fence001
+    2300002: Fence002
+    2300004: Fence003
+    2300006: Fence004
+    2300008: Hatch
+    2300010: MeshBridge001
+    2300012: MeshBridge002
+    2300014: MeshFloor001
+    2300016: MeshFloor002
+    2300018: MeshFloor003
+    2300020: MeshFloor004
+    2300022: MeshFloor005
+    3300000: Fence001
+    3300002: Fence002
+    3300004: Fence003
+    3300006: Fence004
+    3300008: Hatch
+    3300010: MeshBridge001
+    3300012: MeshBridge002
+    3300014: MeshFloor001
+    3300016: MeshFloor002
+    3300018: MeshFloor003
+    3300020: MeshFloor004
+    3300022: MeshFloor005
+    4300000: Hatch
+    4300002: MeshFloor001
+    4300004: MeshBridge001
+    4300006: MeshBridge002
+    4300008: Fence001
+    4300010: Fence002
+    4300012: Fence003
+    4300014: Fence004
+    4300016: MeshFloor002
+    4300018: MeshFloor003
+    4300020: MeshFloor004
+    4300022: MeshFloor005
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fence
+    second: {fileID: 2100000, guid: 3f93d09cee564673254e41bb2f04c65c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: HatchMetal
+    second: {fileID: 2100000, guid: 446a1fc3e35be2867c215a7fe5233ea5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: HatchWood
+    second: {fileID: 2100000, guid: da7a265f24aab5286fb3a881cfc79fc9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MeshBridge
+    second: {fileID: 2100000, guid: db9c3b0d9d4fcfde4ba03a34a2b85300, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MeshFloor
+    second: {fileID: 2100000, guid: 1d39e00f3523e2118b176505ccff1245, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

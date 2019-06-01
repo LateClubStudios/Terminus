@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 15
-  productGUID: f7b23078d4804fb4c979042fd97b665b
+  productGUID: 48d2cd29f3bca7244bfa5916b6ec4786
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Late Club Studios
-  productName: Outnumbered
+  productName: Terminus
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -40,13 +40,13 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos:
-  - logo: {fileID: 10404, guid: 0000000000000000e000000000000000, type: 0}
+  - logo: {fileID: 21300000, guid: 26674f2a66565644ca0167d23a2a20f0, type: 3}
     duration: 2
   - logo: {fileID: 21300000, guid: cd684c19dc88854469ae8fdf8bf08f74, type: 3}
     duration: 2
-  - logo: {fileID: 21300000, guid: d9bf4dd314b15f94cbb4ae2057179114, type: 3}
+  - logo: {fileID: 21300000, guid: d8a231eda54a2c244b93114186e56d59, type: 3}
     duration: 2
-  - logo: {fileID: 21300000, guid: 26674f2a66565644ca0167d23a2a20f0, type: 3}
+  - logo: {fileID: 10404, guid: 0000000000000000e000000000000000, type: 0}
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -98,7 +98,7 @@ PlayerSettings:
   visibleInBackground: 1
   allowFullscreenSwitch: 1
   graphicsJobMode: 0
-  fullscreenMode: 1
+  fullscreenMode: 0
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -126,7 +126,7 @@ PlayerSettings:
     16:10: 0
     16:9: 1
     Others: 0
-  bundleVersion: 0.2
+  bundleVersion: 0.0.3
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -159,10 +159,8 @@ PlayerSettings:
   resolutionScalingMode: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier:
-    Standalone: com.LateClub.Outnumbered
-  buildNumber:
-    Standalone: 2
+  applicationIdentifier: {}
+  buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
@@ -265,13 +263,13 @@ PlayerSettings:
     height: 180
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
-  resolutionDialogBanner: {fileID: 2800000, guid: f94c340099567b34886f9f04da0b10cc,
+  resolutionDialogBanner: {fileID: 2800000, guid: f16e3d1919e1e5648b46473ca08c94f3,
     type: 3}
   m_BuildTargetIcons:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 7ab48b64b986ac346b469142a9a70d3c, type: 3}
+      m_Icon: {fileID: 2800000, guid: 1ed30c8fc0f13ee4d9aa784742c374e1, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -674,8 +672,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 07823a98-5615-4f87-8cdf-fe0d420208a6
-  projectName: NextGenSynopticProject-Outnumbered
+  cloudProjectId: 3dcc3969-ac12-4a9b-b2d4-8b024ca49e81
+  projectName: Terminus
   organizationId: lateclubstudios
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

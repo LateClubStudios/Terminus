@@ -18,11 +18,15 @@ public class BoxLock : MonoBehaviour {
         {
             Debug.Log("BoxLock | Locked on Max");
             transform.position = new Vector3(transform.position.x, transform.position.y, maxZ);
+            //GameObject.Find("Player/PlayerRig").GetComponent<ccLocks>().grabSwitch = false;
+            StartCoroutine("Timer01");
         }
         else if(transform.position.z < minZ)
         {
             Debug.Log("BoxLock | Locked on Min");
             transform.position = new Vector3(transform.position.x, transform.position.y, minZ);
+            //GameObject.Find("Player/PlayerRig").GetComponent<ccLocks>().grabSwitch = false;
+            StartCoroutine("Timer01");
         }
         else
         {
@@ -30,4 +34,11 @@ public class BoxLock : MonoBehaviour {
         }
 
 	}
+
+    IEnumerator Timer01()
+    {
+        Debug.Log("BoxLock | timer");
+        yield return new WaitForSeconds(1.0f);
+        //GameObject.Find("Player/PlayerRig").GetComponent<ccLocks>().grabSwitch = true;
+    }
 }

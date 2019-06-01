@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/MaintenanceRoomScene.unity
+- path: Assets/Scenes/000-TutorialScene.unity
   isLoaded: 1
   isActive: 1

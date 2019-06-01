@@ -1,0 +1,193 @@
+fileFormatVersion: 2
+guid: d7cfd58e2aa9ad2458640e73058f9e17
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Building Chalfont Court
+    100004: Building Chiltern Court
+    100006: Building Cornwall House
+    100008: Building Fan Shaft
+    100010: Building Farley Court
+    100012: Building You Me Sushi
+    100014: Building1639
+    100016: Building1640
+    100018: Building1700
+    100020: Building1708
+    100022: Building1789
+    100024: Building1794
+    100026: CenterDir
+    100028: Rail Bakerloo Line
+    100030: Rail Jubilee Line
+    100032: Rail Metropolitan Line
+    100034: Tunnel Bakerloo Line
+    100036: Tunnel Jubilee Line
+    100038: Tunnel Metropolitan Line
+    100040: WalkDir
+    400000: //RootNode
+    400002: Building Chalfont Court
+    400004: Building Chiltern Court
+    400006: Building Cornwall House
+    400008: Building Fan Shaft
+    400010: Building Farley Court
+    400012: Building You Me Sushi
+    400014: Building1639
+    400016: Building1640
+    400018: Building1700
+    400020: Building1708
+    400022: Building1789
+    400024: Building1794
+    400026: CenterDir
+    400028: Rail Bakerloo Line
+    400030: Rail Jubilee Line
+    400032: Rail Metropolitan Line
+    400034: Tunnel Bakerloo Line
+    400036: Tunnel Jubilee Line
+    400038: Tunnel Metropolitan Line
+    400040: WalkDir
+    2100000: 01 - Default
+    2100002: 02 - Default
+    2100004: 03 - Default
+    2300000: Building Chalfont Court
+    2300002: Building Chiltern Court
+    2300004: Building Cornwall House
+    2300006: Building Fan Shaft
+    2300008: Building Farley Court
+    2300010: Building You Me Sushi
+    2300012: Building1639
+    2300014: Building1640
+    2300016: Building1700
+    2300018: Building1708
+    2300020: Building1789
+    2300022: Building1794
+    2300024: CenterDir
+    2300026: Rail Bakerloo Line
+    2300028: Rail Jubilee Line
+    2300030: Rail Metropolitan Line
+    2300032: Tunnel Bakerloo Line
+    2300034: Tunnel Jubilee Line
+    2300036: Tunnel Metropolitan Line
+    2300038: WalkDir
+    3300000: Building Chalfont Court
+    3300002: Building Chiltern Court
+    3300004: Building Cornwall House
+    3300006: Building Fan Shaft
+    3300008: Building Farley Court
+    3300010: Building You Me Sushi
+    3300012: Building1639
+    3300014: Building1640
+    3300016: Building1700
+    3300018: Building1708
+    3300020: Building1789
+    3300022: Building1794
+    3300024: CenterDir
+    3300026: Rail Bakerloo Line
+    3300028: Rail Jubilee Line
+    3300030: Rail Metropolitan Line
+    3300032: Tunnel Bakerloo Line
+    3300034: Tunnel Jubilee Line
+    3300036: Tunnel Metropolitan Line
+    3300038: WalkDir
+    4300000: Building Chiltern Court
+    4300002: Tunnel Metropolitan Line
+    4300004: Tunnel Jubilee Line
+    4300006: Tunnel Bakerloo Line
+    4300008: Rail Metropolitan Line
+    4300010: Rail Jubilee Line
+    4300012: Rail Bakerloo Line
+    4300014: Building1794
+    4300016: Building1789
+    4300018: Building1708
+    4300020: Building1700
+    4300022: Building1640
+    4300024: Building1639
+    4300026: Building You Me Sushi
+    4300028: Building Farley Court
+    4300030: Building Fan Shaft
+    4300032: Building Cornwall House
+    4300034: Building Chalfont Court
+    4300036: WalkDir
+    4300038: CenterDir
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
