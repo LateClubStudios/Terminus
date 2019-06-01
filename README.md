@@ -1,2 +1,2 @@
-# NextGenSynopticProject-Outnumbered
-The Outnumbered game for the NextGen synoptic project. 
+# NextGenSynopticProject-Terminus
+The Terminus game for the NextGen synoptic project. 
