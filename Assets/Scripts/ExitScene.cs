@@ -25,7 +25,7 @@ public class ExitScene : MonoBehaviour {
 
     private void ExitCoroutine()
     {
-        if (exitActive == true && Input.GetButtonDown("Grab"))
+        if (exitActive == true && Input.GetButtonDown("Grab") || exitActive == true && Input.GetButtonDown("GrabXbox"))
         {
             Debug.Log("Exiting scene.");
             StartCoroutine(SceneExit());

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/000-TutorialScene.unity
+- path: Assets/Scenes/001-BakerStOverground.unity
   isLoaded: 1
   isActive: 1

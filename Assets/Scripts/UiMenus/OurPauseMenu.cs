@@ -81,6 +81,6 @@ public class OurPauseMenu : MonoBehaviour {
 	{
 		Debug.Log ("loading quit");
 		Time.timeScale = 1f;
-		SceneManager.LoadScene ("MainMenu");
+		SceneManager.LoadScene(0);
 	}
 }

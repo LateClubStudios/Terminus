@@ -51,7 +51,7 @@ public class MaintenanceFunctionController : MonoBehaviour {
     IEnumerator Delay01()
     {
         Debug.Log("01");
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         GameObject.Find("DropCubeHolder/DropCube").SetActive(false);
         GameObject.Find("Player/PlayerRig").GetComponent<Rigidbody>().isKinematic = true;
         GameObject.Find("Player/PlayerRig").GetComponent<CapsuleCollider>().enabled = false;
@@ -76,7 +76,6 @@ public class MaintenanceFunctionController : MonoBehaviour {
         Debug.Log("03");
         yield return new WaitForSeconds(7.0f);
         GameObject.Find("DropCubeHolder").SetActive(false);
-        yield return new WaitForSeconds(1.0f);
         GameObject.Find("Projectors/Projector01").GetComponent<Animator>().SetBool("On", true);
         yield return new WaitForSeconds(5.0f);
         GameObject.Find("Player/PlayerRig").GetComponent<ccLocks>().mainSwitch = true;
